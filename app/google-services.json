@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "411178955692",
+    "project_id": "quick-attend-aa6af",
+    "storage_bucket": "quick-attend-aa6af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411178955692:android:d80886d18ef137a9264009",
+        "android_client_info": {
+          "package_name": "com.greenshark.quickattend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411178955692-4krpao5tcu8rm3i09tl5s891mfoksc67.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.greenshark.quickattend",
+            "certificate_hash": "bb07047ca77a6297326ac2c6b51d01ff7726e7ab"
+          }
+        },
+        {
+          "client_id": "411178955692-tarn240v80m26kcp4qnfso9a97gqig2h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw-8Kih2r3LjGO2JnoYCL_1TLT86Pebkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411178955692-tarn240v80m26kcp4qnfso9a97gqig2h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,7 +11,7 @@ enum class Screen {
     SIGN_UP
 }
 
-sealed class NavigationItem(val  route: String) {
+sealed class NavigationItem(val route: String) {
     object Home : NavigationItem(Screen.HOME.name)
     object Login : NavigationItem(Screen.LOGIN.name)
     object SignIn : NavigationItem(Screen.SIGN_IN.name)

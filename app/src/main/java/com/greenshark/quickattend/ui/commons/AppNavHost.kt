@@ -27,17 +27,17 @@ fun AppNavHost(
         navController = navController,
         startDestination = starDestination
     ) {
-        composable(NavigationItem.Login.route){
-            LoginScreen(navController)
+        composable(NavigationItem.Login.route) {
+            LoginScreen(navController, authViewModel)
         }
-        composable(NavigationItem.SignIn.route){
-            SignInScreen(navController)
+        composable(NavigationItem.SignIn.route) {
+            SignInScreen(navController, authViewModel)
         }
-        composable(NavigationItem.SignUp.route){
-            SignUpScreen(navController)
+        composable(NavigationItem.SignUp.route) {
+            SignUpScreen(navController, authViewModel)
         }
-        composable(NavigationItem.Home.route){
-            HomeScreen(navController)
+        composable(NavigationItem.Home.route) {
+            HomeScreen(navController, authViewModel)
         }
     }
 }

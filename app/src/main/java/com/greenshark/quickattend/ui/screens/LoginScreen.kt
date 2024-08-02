@@ -1,5 +1,7 @@
 package com.greenshark.quickattend.ui.screens
 
+import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -15,9 +17,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.greenshark.quickattend.AuthViewModel
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.ui.commons.NavigationItem
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
@@ -35,7 +41,23 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
  */
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
+    val context = LocalContext.current as Activity
+    val RC_SIGN_IN = 86
+
+    val googleSignInResult by authViewModel.googleSignInResult.observeAsState()
+
+    googleSignInResult?.let { result ->
+        result.fold(
+            onSuccess = { account ->
+                authViewModel.authWithGoogle(account)
+            },
+            onFailure = { e ->
+                Toast.makeText(context, "Google sign in failed: $e", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,7 +106,7 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         ElevatedButton(onClick = {
-
+            authViewModel.signInWithGoogle(context, RC_SIGN_IN)
         }, modifier = Modifier.width(250.dp)) {
             Image(
                 painter = painterResource(id = com.google.android.gms.base.R.drawable.googleg_standard_color_18),
@@ -100,6 +122,6 @@ fun LoginScreen(navController: NavController) {
 @Composable
 fun LoginScreenPreview() {
     QuickAttendTheme {
-        LoginScreen(rememberNavController())
+        LoginScreen(rememberNavController(), authViewModel = AuthViewModel())
     }
 }

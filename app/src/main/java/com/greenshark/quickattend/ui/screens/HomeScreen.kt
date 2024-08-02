@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.greenshark.quickattend.AuthViewModel
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 
 /**
@@ -12,7 +13,7 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
  */
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
     Text(text = "Home Screen")
 }
 
@@ -20,6 +21,6 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun HomeScreenPreview() {
     QuickAttendTheme {
-        HomeScreen(rememberNavController())
+        HomeScreen(rememberNavController(), authViewModel = AuthViewModel())
     }
 }

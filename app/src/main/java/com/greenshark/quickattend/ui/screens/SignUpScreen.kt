@@ -49,7 +49,7 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
  */
 
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -149,7 +149,7 @@ fun SignUpScreen(navController: NavController) {
 
         Button(
             onClick = {
-                //authViewModel.createUser(email, password)
+                authViewModel.createUser(email, password)
             },
             modifier = Modifier.width(250.dp),
             colors = ButtonDefaults.buttonColors(Color.Black)
@@ -164,6 +164,6 @@ fun SignUpScreen(navController: NavController) {
 @Composable
 fun SignUpScreenPreview() {
     QuickAttendTheme {
-        SignUpScreen(rememberNavController())
+        SignUpScreen(rememberNavController(), authViewModel = AuthViewModel())
     }
 }

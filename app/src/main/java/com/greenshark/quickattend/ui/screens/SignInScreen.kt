@@ -48,14 +48,14 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
  */
 
 @Composable
-fun SignInScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun SignInScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.login_image),
+            painter = painterResource(id = R.drawable.sign_in_image),
             contentDescription = "Imagen del inicio de sesion",
             modifier = Modifier.size(300.dp)
         )
@@ -130,7 +130,7 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel) {
 
         Button(
             onClick = {
-                authViewModel.signIn(email, password)
+                //authViewModel.signIn(email, password)
             },
             modifier = Modifier.width(250.dp),
             colors = ButtonDefaults.buttonColors(Color.Black)
@@ -144,6 +144,6 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel) {
 @Composable
 fun SignInScreenPreview() {
     QuickAttendTheme {
-        SignInScreen(rememberNavController(), AuthViewModel())
+        SignInScreen(rememberNavController())
     }
 }

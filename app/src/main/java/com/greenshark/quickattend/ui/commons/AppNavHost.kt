@@ -31,10 +31,10 @@ fun AppNavHost(
             LoginScreen(navController)
         }
         composable(NavigationItem.SignIn.route){
-            SignInScreen(navController, authViewModel)
+            SignInScreen(navController)
         }
         composable(NavigationItem.SignUp.route){
-            SignUpScreen(navController, authViewModel)
+            SignUpScreen(navController)
         }
         composable(NavigationItem.Home.route){
             HomeScreen(navController)

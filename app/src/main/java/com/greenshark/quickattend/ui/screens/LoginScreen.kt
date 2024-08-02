@@ -59,7 +59,7 @@ fun LoginScreen(navController: NavController) {
         Text(
             modifier = Modifier.padding(start = 50.dp, end = 50.dp),
             textAlign = TextAlign.Center,
-            text = "¡Hola! Descubre un mundo de posibilidades en [Nombre de la app]. Explora, conecta y disfruta. ¡Regístrate ya!"
+            text = "¡Bienvenido! Registra tu asistencia de manera fácil y rápida."
         )
 
         Spacer(modifier = Modifier.height(20.dp))

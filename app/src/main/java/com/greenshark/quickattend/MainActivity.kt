@@ -1,5 +1,6 @@
 package com.greenshark.quickattend
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,6 +13,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -39,6 +42,18 @@ class MainActivity : ComponentActivity() {
         authViewModel.initGoogleSignInClient(googleSignInClient)
 
         enableEdgeToEdge()
+
+        val cameraPermissionGranted = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PermissionChecker.PERMISSION_GRANTED
+
+        val startDestination = if (cameraPermissionGranted) {
+            NavigationItem.Scan.route
+        } else {
+            NavigationItem.Welcome.route
+        }
+
         setContent {
             QuickAttendTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -46,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     AppNavHost(
                         Modifier.padding(innerPadding),
                         navController = rememberNavController(),
-                        starDestination = if (authState == null) NavigationItem.Login.route else NavigationItem.Home.route,
+                        starDestination = if (authState == null) NavigationItem.Login.route else startDestination,
                         authViewModel = authViewModel
                     )
                 }

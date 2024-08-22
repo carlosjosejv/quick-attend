@@ -8,8 +8,10 @@ import androidx.navigation.compose.composable
 import com.greenshark.quickattend.AuthViewModel
 import com.greenshark.quickattend.ui.screens.HomeScreen
 import com.greenshark.quickattend.ui.screens.LoginScreen
+import com.greenshark.quickattend.ui.screens.ScanScreen
 import com.greenshark.quickattend.ui.screens.SignInScreen
 import com.greenshark.quickattend.ui.screens.SignUpScreen
+import com.greenshark.quickattend.ui.screens.WelcomeScreen
 
 /**
  * Created by Carlos Jiménez on 01-Aug-24.
@@ -31,13 +33,19 @@ fun AppNavHost(
             LoginScreen(navController, authViewModel)
         }
         composable(NavigationItem.SignIn.route) {
-            SignInScreen(navController, authViewModel)
+            SignInScreen(navController = navController, authViewModel)
         }
         composable(NavigationItem.SignUp.route) {
-            SignUpScreen(navController, authViewModel)
+            SignUpScreen(navController = navController, authViewModel)
         }
         composable(NavigationItem.Home.route) {
-            HomeScreen(navController, authViewModel)
+            HomeScreen(navController = navController)
+        }
+        composable(NavigationItem.Welcome.route) {
+            WelcomeScreen(navController = navController)
+        }
+        composable(NavigationItem.Scan.route) {
+            ScanScreen(navController = navController)
         }
     }
 }

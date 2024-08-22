@@ -74,4 +74,6 @@ dependencies {
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
+
+    implementation (libs.accompanist.permissions)
 }

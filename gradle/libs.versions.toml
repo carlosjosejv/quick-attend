@@ -1,4 +1,5 @@
 [versions]
+accompanistPermissions = "0.35.2-beta"
 agp = "8.5.0"
 firebaseBomVersion = "32.8.0"
 kotlin = "1.9.0"
@@ -14,6 +15,7 @@ playServicesAuth = "21.2.0"
 runtimeLivedata = "1.6.8"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

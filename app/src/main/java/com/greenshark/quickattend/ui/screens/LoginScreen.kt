@@ -41,7 +41,7 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
  */
 
 @Composable
-fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = AuthViewModel()) {
     val context = LocalContext.current as Activity
     val RC_SIGN_IN = 86
 
@@ -64,7 +64,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.login_image),
+            painter = painterResource(id = R.drawable.login),
             contentDescription = "Imagen del inicio de sesion",
             modifier = Modifier.size(300.dp)
         )
@@ -105,6 +105,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
+
         ElevatedButton(onClick = {
             authViewModel.signInWithGoogle(context, RC_SIGN_IN)
         }, modifier = Modifier.width(250.dp)) {
@@ -122,6 +123,6 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
 @Composable
 fun LoginScreenPreview() {
     QuickAttendTheme {
-        LoginScreen(rememberNavController(), authViewModel = AuthViewModel())
+        LoginScreen(rememberNavController())
     }
 }

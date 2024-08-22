@@ -8,7 +8,9 @@ enum class Screen {
     HOME,
     LOGIN,
     SIGN_IN,
-    SIGN_UP
+    SIGN_UP,
+    WELCOME,
+    SCAN
 }
 
 sealed class NavigationItem(val route: String) {
@@ -16,4 +18,6 @@ sealed class NavigationItem(val route: String) {
     object Login : NavigationItem(Screen.LOGIN.name)
     object SignIn : NavigationItem(Screen.SIGN_IN.name)
     object SignUp : NavigationItem(Screen.SIGN_UP.name)
+    object Welcome : NavigationItem(Screen.WELCOME.name)
+    object Scan : NavigationItem(Screen.SCAN.name)
 }

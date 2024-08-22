@@ -13,7 +13,7 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
  */
 
 @Composable
-fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun HomeScreen(navController: NavController) {
     Text(text = "Home Screen")
 }
 
@@ -21,6 +21,6 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
 @Composable
 fun HomeScreenPreview() {
     QuickAttendTheme {
-        HomeScreen(rememberNavController(), authViewModel = AuthViewModel())
+        HomeScreen(rememberNavController())
     }
 }

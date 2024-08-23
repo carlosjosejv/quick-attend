@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
         ) == PermissionChecker.PERMISSION_GRANTED
 
         val startDestination = if (cameraPermissionGranted) {
-            NavigationItem.Scan.route
+            NavigationItem.Home.route
         } else {
             NavigationItem.Welcome.route
         }

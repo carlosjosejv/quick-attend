@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.greenshark.quickattend.AuthViewModel
+import com.greenshark.quickattend.ui.screens.HistoryScreen
 import com.greenshark.quickattend.ui.screens.HomeScreen
 import com.greenshark.quickattend.ui.screens.LoginScreen
 import com.greenshark.quickattend.ui.screens.ScanScreen
@@ -46,6 +47,9 @@ fun AppNavHost(
         }
         composable(NavigationItem.Scan.route) {
             ScanScreen(navController = navController)
+        }
+        composable(NavigationItem.History.route) {
+            HistoryScreen(navController = navController)
         }
     }
 }

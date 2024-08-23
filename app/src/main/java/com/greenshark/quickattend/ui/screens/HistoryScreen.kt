@@ -1,6 +1,5 @@
 package com.greenshark.quickattend.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,12 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Sort
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.automirrored.filled.KeyboardReturn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,17 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.greenshark.quickattend.R
-import com.greenshark.quickattend.ui.commons.NavigationItem
+import com.greenshark.quickattend.data.Attend
+import com.greenshark.quickattend.ui.component.AttendItem
 import com.greenshark.quickattend.ui.theme.Gray10
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 
 /**
- * Created by Carlos Jiménez on 01-Aug-24.
+ * Created by Carlos Jiménez on 22-Aug-24.
  */
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HistoryScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +47,7 @@ fun HomeScreen(navController: NavController) {
     ) {
         IconButton(
             onClick = {
-                navController.navigate(NavigationItem.History.route)
+
             },
             modifier = Modifier
                 .size(48.dp)
@@ -59,7 +56,7 @@ fun HomeScreen(navController: NavController) {
                 .background(Color.Black)
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.Sort,
+                imageVector = Icons.AutoMirrored.Filled.KeyboardReturn,
                 contentDescription = null,
                 tint = Color.White
             )
@@ -72,7 +69,7 @@ fun HomeScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Escanea el código QR",
+                text = "Historial de Asistencia",
                 fontSize = 25.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
@@ -84,38 +81,29 @@ fun HomeScreen(navController: NavController) {
             Text(
                 textAlign = TextAlign.Center,
                 color = Gray10,
-                text = "Coloque el código QR dentro del marco para escanear. Evite agitarlo para obtener resultados rápidamente."
+                text = "Aquí podrás revisar y gestionar todos los registros de tus asistencias de manera clara y detallada."
+
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.qr_reader),
-                contentDescription = "Attend image"
-            )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            val attends = List(6){Attend()}
 
-            Button(
-                onClick = {
-
-                },
-                modifier = Modifier
-                    .width(300.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(5.dp),
-                colors = ButtonDefaults.buttonColors(Color.Black)
-            ) {
-                Text(text = "Escanear", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(attends){attend ->
+                    AttendItem(attend)
+                }
             }
+
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+fun HistoryScreenPreview() {
     QuickAttendTheme {
-        HomeScreen(rememberNavController())
+        HistoryScreen(rememberNavController())
     }
 }

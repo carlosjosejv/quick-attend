@@ -43,7 +43,7 @@ fun AttendItem(attend: Attend = Attend()) {
         Column {
             Text(
                 text = attend.location,
-                fontSize = 15.sp,
+                fontSize = 12.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
@@ -51,7 +51,7 @@ fun AttendItem(attend: Attend = Attend()) {
 
             Text(
                 text = attend.date,
-                fontSize = 12.sp,
+                fontSize = 10.sp,
                 color = Color.DarkGray,
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center
@@ -62,7 +62,7 @@ fun AttendItem(attend: Attend = Attend()) {
 
         Text(
             text = attend.time,
-            fontSize = 15.sp,
+            fontSize = 12.sp,
             color = Color.DarkGray,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center

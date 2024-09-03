@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,65 +41,67 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 
 @Composable
 fun HistoryScreen(navController: NavController) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp)
+            .padding(horizontal = 30.dp, vertical = 30.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        IconButton(
-            onClick = {
 
-            },
+        Box(
             modifier = Modifier
-                .size(48.dp)
-                .align(Alignment.TopEnd)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.Black)
+                .fillMaxWidth()
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardReturn,
-                contentDescription = null,
-                tint = Color.White
-            )
+            IconButton(
+                onClick = {
+
+                },
+                modifier = Modifier
+                    .size(48.dp)
+                    .align(Alignment.TopEnd)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.Black)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardReturn,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Historial de Asistencia",
-                fontSize = 25.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+        Spacer(modifier = Modifier.height(20.dp))
 
-            Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "Historial de Asistencia",
+            fontSize = 25.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
 
-            Text(
-                textAlign = TextAlign.Center,
-                color = Gray10,
-                text = "Aquí podrás revisar y gestionar todos los registros de tus asistencias de manera clara y detallada."
+        Spacer(modifier = Modifier.height(20.dp))
 
-            )
+        Text(
+            textAlign = TextAlign.Center,
+            color = Gray10,
+            text = "Aquí podrás revisar y gestionar todos los registros de tus asistencias de manera clara y detallada."
 
-            Spacer(modifier = Modifier.height(20.dp))
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
 
 
-            val attends = List(6){Attend()}
+        val attends = List(10) { Attend() }
 
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(attends){attend ->
-                    AttendItem(attend)
-                }
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            items(attends) { attend ->
+                AttendItem(attend)
             }
-
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

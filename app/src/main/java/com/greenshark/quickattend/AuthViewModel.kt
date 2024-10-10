@@ -47,7 +47,14 @@ class AuthViewModel : ViewModel() {
             val account = task.getResult(ApiException::class.java)
             _googleSignInResult.value = Result.success(account)
         } catch (e: ApiException) {
-            _googleSignInResult.value = Result.failure(e)
+            val errorMessage = when (e.statusCode) {
+                GoogleSignInStatusCodes.SIGN_IN_CANCELLED -> "Sign-in was canceled. Please try again."
+                GoogleSignInStatusCodes.SIGN_IN_FAILED -> "Sign-in failed. Please check your connection and try again."
+                GoogleSignInStatusCodes.NETWORK_ERROR -> "Network error occurred. Please check your internet connection."
+                GoogleSignInStatusCodes.DEVELOPER_ERROR -> "Developer error. Please check your app's configuration."
+                else -> "An unknown error occurred. Please try again."
+            }
+            _googleSignInResult.value = Result.failure(Exception(errorMessage))
         }
     }
 

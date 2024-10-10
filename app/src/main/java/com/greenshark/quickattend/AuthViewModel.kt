@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -48,10 +50,10 @@ class AuthViewModel : ViewModel() {
             _googleSignInResult.value = Result.success(account)
         } catch (e: ApiException) {
             val errorMessage = when (e.statusCode) {
-                GoogleSignInStatusCodes.SIGN_IN_CANCELLED -> "Sign-in was canceled. Please try again."
-                GoogleSignInStatusCodes.SIGN_IN_FAILED -> "Sign-in failed. Please check your connection and try again."
-                GoogleSignInStatusCodes.NETWORK_ERROR -> "Network error occurred. Please check your internet connection."
-                GoogleSignInStatusCodes.DEVELOPER_ERROR -> "Developer error. Please check your app's configuration."
+                CommonStatusCodes.CANCELED -> "Sign-in was canceled. Please try again."
+                CommonStatusCodes.ERROR -> "Sign-in failed. Please check your connection and try again."
+                CommonStatusCodes.NETWORK_ERROR -> "Network error occurred. Please check your internet connection."
+                CommonStatusCodes.DEVELOPER_ERROR -> "Developer error. Please check your app's configuration."
                 else -> "An unknown error occurred. Please try again."
             }
             _googleSignInResult.value = Result.failure(Exception(errorMessage))

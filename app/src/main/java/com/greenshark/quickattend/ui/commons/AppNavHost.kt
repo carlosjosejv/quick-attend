@@ -22,13 +22,13 @@ import com.greenshark.quickattend.ui.screens.WelcomeScreen
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    starDestination: String,
+    startDestination: String,
     authViewModel: AuthViewModel
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = starDestination
+        startDestination = startDestination
     ) {
         composable(NavigationItem.Login.route) {
             LoginScreen(navController, authViewModel)

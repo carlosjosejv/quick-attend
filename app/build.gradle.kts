@@ -2,16 +2,17 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.greenshark.quickattend"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.greenshark.quickattend"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 

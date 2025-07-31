@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     AppNavHost(
                         Modifier.padding(innerPadding),
                         navController = rememberNavController(),
-                        starDestination = if (authState == null) NavigationItem.Login.route else startDestination,
+                        startDestination = if (authState == null) NavigationItem.Login.route else startDestination,
                         authViewModel = authViewModel
                     )
                 }

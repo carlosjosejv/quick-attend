@@ -1,7 +1,7 @@
 package com.greenshark.quickattend.ui.screens
 
-import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -42,20 +43,16 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 
 @Composable
 fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = AuthViewModel()) {
-    val context = LocalContext.current as Activity
-    val RC_SIGN_IN = 86
+    val context = LocalContext.current
+    val activity = LocalActivity.current
 
-    val googleSignInResult by authViewModel.googleSignInResult.observeAsState()
+    val googleSignInError by authViewModel.googleSignInError.observeAsState()
 
-    googleSignInResult?.let { result ->
-        result.fold(
-            onSuccess = { account ->
-                authViewModel.authWithGoogle(account)
-            },
-            onFailure = { e ->
-                Toast.makeText(context, "Google sign in failed: $e", Toast.LENGTH_SHORT).show()
-            }
-        )
+    LaunchedEffect(googleSignInError) {
+        googleSignInError?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            authViewModel.googleSignInErrorShown()
+        }
     }
 
     Column(
@@ -107,7 +104,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = Aut
 
 
         ElevatedButton(onClick = {
-            authViewModel.signInWithGoogle(context, RC_SIGN_IN)
+            activity?.let { authViewModel.signInWithGoogle(it) }
         }, modifier = Modifier.width(250.dp)) {
             Image(
                 painter = painterResource(id = com.google.android.gms.base.R.drawable.googleg_standard_color_18),

@@ -2,7 +2,6 @@ package com.greenshark.quickattend.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -56,6 +53,23 @@ fun HomeScreen(navController: NavController) {
         ) {
             IconButton(
                 onClick = {
+
+                },
+                modifier = Modifier
+                    .size(48.dp)
+                    .align(Alignment.TopStart)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.Black)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.add_task),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+
+            IconButton(
+                onClick = {
                     navController.navigate(NavigationItem.History.route)
                 },
                 modifier = Modifier
@@ -65,7 +79,7 @@ fun HomeScreen(navController: NavController) {
                     .background(Color.Black)
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Sort,
+                    painter = painterResource(R.drawable.list_alt_check),
                     contentDescription = null,
                     tint = Color.White
                 )

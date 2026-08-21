@@ -3,6 +3,6 @@
 
     <!-- android:fontFamily only resolves font resources on API 26+. -->
     <style name="Theme.QuickAttend" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:fontFamily">@font/roboto_slab</item>
+        <item name="android:fontFamily">@font/outfit</item>
     </style>
 </resources>

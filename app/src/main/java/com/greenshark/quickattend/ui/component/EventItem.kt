@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,12 +29,12 @@ import androidx.compose.ui.unit.sp
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.Event
 import com.greenshark.quickattend.ui.theme.Black
-import com.greenshark.quickattend.ui.theme.Green10
+import com.greenshark.quickattend.ui.theme.Turquoise
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 import com.greenshark.quickattend.ui.theme.White
 
 @Composable
-fun EventItem(event: Event) {
+fun EventItem(event: Event, host: Boolean = false) {
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth(),
@@ -44,7 +43,7 @@ fun EventItem(event: Event) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Green10, shape = RoundedCornerShape(16.dp))
+                .background(color = Turquoise, shape = RoundedCornerShape(16.dp))
                 .clip(shape = RoundedCornerShape(16.dp))
         ) {
             Box(
@@ -64,7 +63,8 @@ fun EventItem(event: Event) {
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
                             text = event.title,
@@ -74,6 +74,20 @@ fun EventItem(event: Event) {
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
+
+                        Box(
+                            modifier = Modifier.background(
+                                color = Turquoise.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(size = 16.dp)
+                            )
+                        ) {
+                            Text(
+                                text = stringResource(if (host) R.string.host else R.string.attendant),
+                                color = Black,
+                                fontSize = 14.sp,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
                     }
 
                     Row(
@@ -106,7 +120,7 @@ fun EventItem(event: Event) {
                             contentDescription = null
                         )
                         Text(
-                            text = "${stringResource(R.string.time)}, ${event.time}",
+                            text = "${stringResource(R.string.time)}, ${event.schedule}",
                             color = Black,
                             fontSize = 16.sp,
                             maxLines = 1,
@@ -146,11 +160,13 @@ fun EventItemPreview() {
             event = Event(
                 id = "1",
                 date = "May 18, 2026",
-                time = "13:00",
+                schedule = "13:00",
                 title = "Clase de Yoga",
                 description = "",
                 location = "Salon C201",
-                organizerId = "1"
+                mapLocation = "",
+                organizerId = "1",
+                organizerName = "Carlos Jiménez"
             )
         )
     }

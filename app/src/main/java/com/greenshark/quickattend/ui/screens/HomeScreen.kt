@@ -1,38 +1,35 @@
 package com.greenshark.quickattend.ui.screens
 
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.greenshark.quickattend.R
+import com.greenshark.quickattend.ui.component.DayItem
 import com.greenshark.quickattend.ui.component.Shortcut
 import com.greenshark.quickattend.ui.theme.Black
-import com.greenshark.quickattend.ui.theme.Green10
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
-import com.greenshark.quickattend.ui.theme.White
+import java.time.LocalDate
+import java.time.format.TextStyle
 
 /**
  * Created by Carlos Jiménez on 01-Aug-24.
@@ -47,6 +44,57 @@ fun HomeScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(space = 16.dp)
     ) {
+
+        val locale = LocalConfiguration.current.locales[0]
+        val today = LocalDate.now()
+        val monthName = remember(today.month, locale) {
+            today.month.getDisplayName(TextStyle.FULL, locale)
+        }
+        val monthDays = remember(today.year, today.month) {
+            (1..today.lengthOfMonth()).map(today::withDayOfMonth)
+        }
+        val dayListState = rememberLazyListState(
+            initialFirstVisibleItemIndex = today.dayOfMonth - 1
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(space = 8.dp)
+        ) {
+
+            Text(
+                text = monthName,
+                color = Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .align(alignment = Alignment.Start)
+            )
+
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                state = dayListState,
+                flingBehavior = rememberSnapFlingBehavior(lazyListState = dayListState),
+                horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
+            ) {
+                items(
+                    items = monthDays,
+                    key = { day -> day.dayOfMonth }
+                ) { day ->
+                    DayItem(
+                        onClick = {
+
+                        },
+                        dayName = day.dayOfWeek.getDisplayName(TextStyle.SHORT, locale),
+                        dayNumber = day.dayOfMonth,
+                        today = day == today
+                    )
+                }
+            }
+        }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -64,149 +112,6 @@ fun HomeScreen(navController: NavController) {
                 subtitle = stringResource(R.string.shortcut_1),
                 icon = R.drawable.qr_code_scanner
             )
-            Shortcut(
-                onClick = {
-
-                },
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.create_event),
-                subtitle = stringResource(R.string.shortcut_2),
-                icon = R.drawable.calendar_add
-            )
-        }
-        ElevatedCard(
-            onClick = {
-
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.elevatedCardColors(containerColor = White)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = 8.dp,
-                    alignment = Alignment.CenterHorizontally
-                ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.schedule),
-                    contentDescription = null,
-                    tint = Green10,
-                    modifier = Modifier.size(48.dp)
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    Text(
-                        text = stringResource(R.string.my_attendance_history),
-                        fontSize = 18.sp,
-                        color = Black,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 2,
-                        style = LocalTextStyle.current.copy(
-                            platformStyle = PlatformTextStyle(includeFontPadding = false),
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            ),
-                            lineHeight = 16.sp
-                        )
-                    )
-                    Text(
-                        text = stringResource(R.string.description_1),
-                        fontSize = 16.sp,
-                        color = Black,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        style = LocalTextStyle.current.copy(
-                            platformStyle = PlatformTextStyle(includeFontPadding = false),
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            ),
-                            lineHeight = 18.sp
-                        )
-                    )
-                }
-            }
-        }
-        ElevatedCard(
-            onClick = {
-
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.elevatedCardColors(containerColor = White)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = 8.dp,
-                    alignment = Alignment.CenterHorizontally
-                ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.monitoring),
-                    contentDescription = null,
-                    tint = Green10,
-                    modifier = Modifier.size(48.dp)
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    Text(
-                        text = stringResource(R.string.managed_events),
-                        fontSize = 18.sp,
-                        color = Black,
-                        fontWeight = FontWeight.Bold,
-                        style = LocalTextStyle.current.copy(
-                            platformStyle = PlatformTextStyle(includeFontPadding = false),
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            ),
-                            lineHeight = 16.sp
-                        )
-                    )
-                    Text(
-                        text = stringResource(R.string.description_2),
-                        fontSize = 16.sp,
-                        color = Black,
-                        overflow = TextOverflow.Ellipsis,
-                        style = LocalTextStyle.current.copy(
-                            platformStyle = PlatformTextStyle(includeFontPadding = false),
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            ),
-                            lineHeight = 18.sp
-                        )
-                    )
-                }
-            }
-        }
-        Text(
-            text = stringResource(R.string.my_upcoming_events),
-            color = Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            modifier = Modifier
-                .align(alignment = Alignment.Start)
-                .padding(vertical = 16.dp)
-        )
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            
         }
     }
 }
@@ -216,6 +121,6 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun HomeScreenPreview() {
     QuickAttendTheme {
-        HomeScreen(rememberNavController())
+        HomeScreen(navController = rememberNavController())
     }
 }

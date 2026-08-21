@@ -6,7 +6,6 @@ package com.greenshark.quickattend.ui.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
@@ -24,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.greenshark.quickattend.R
-import com.greenshark.quickattend.ui.theme.Green10
+import com.greenshark.quickattend.ui.theme.Turquoise
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 import com.greenshark.quickattend.ui.theme.White
 
@@ -39,13 +38,11 @@ fun Shortcut(
     ElevatedCard(
         onClick = onClick,
         modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(9f / 16f),
-        colors = CardDefaults.elevatedCardColors(containerColor = Green10, contentColor = White),
+            .fillMaxWidth(),
+        colors = CardDefaults.elevatedCardColors(containerColor = Turquoise, contentColor = White),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxWidth()
                 .padding(all = 16.dp),
             verticalArrangement = Arrangement.spacedBy(
                 space = 16.dp,

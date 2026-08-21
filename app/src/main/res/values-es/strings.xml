@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="monday">Lunes</string>
+    <string name="tuesday">Martes</string>
+    <string name="wednesday">Miércoles</string>
+    <string name="thursday">Jueves</string>
+    <string name="friday">Viernes</string>
+    <string name="saturday">Sábado</string>
+    <string name="sunday">Domingo</string>
+
+    <string name="january">Enero</string>
+    <string name="february">Febrero</string>
+    <string name="march">Marzo</string>
+    <string name="april">Abril</string>
+    <string name="may">Mayo</string>
+    <string name="june">Junio</string>
+    <string name="july">Julio</string>
+    <string name="august">Agosto</string>
+    <string name="september">Septiembre</string>
+    <string name="october">Octubre</string>
+    <string name="november">Noviembre</string>
+    <string name="december">Diciembre</string>
+
     <string name="mark_attendance">Marcar Asistencia</string>
     <string name="create_event">Crear Evento</string>
     <string name="shortcut_1">Escanear código QR del evento</string>
     <string name="shortcut_2">Organiza un nuevo evento</string>
     <string name="my_attendance_history">Mi Historial de Asistencia</string>
-    <string name="description_1">Únete rápidamente a un evento y marca tu asistencia.</string>
+    <string name="description_1">Revisa tu registro de asistencia y eventos pasados</string>
     <string name="managed_events">Eventos Gestionados</string>
-    <string name="description_2">Organiza un evento e invita a los asistentes.</string>
+    <string name="description_2">Organiza eventos, administra asistentes y detalles</string>
     <string name="my_upcoming_events">Mis próximos eventos</string>
     <string name="date">Fecha</string>
     <string name="time">Hora</string>
     <string name="location">Ubicación</string>
+    <string name="attendant">Asistente</string>
+    <string name="host">Organizador</string>
+
+    <string name="hold_to_record_attendance">Mantén presionado para registrar la asistencia</string>
+    <string name="see_details">Ver detalles</string>
 </resources>

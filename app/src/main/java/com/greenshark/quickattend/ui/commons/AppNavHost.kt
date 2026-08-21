@@ -4,8 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.greenshark.quickattend.AuthViewModel
+import com.greenshark.quickattend.ui.screens.EventFormScreen
 import com.greenshark.quickattend.ui.screens.HistoryScreen
 import com.greenshark.quickattend.ui.screens.HomeScreen
 import com.greenshark.quickattend.ui.screens.LoginScreen
@@ -50,6 +53,20 @@ fun AppNavHost(
         }
         composable(NavigationItem.History.route) {
             HistoryScreen(navController = navController)
+        }
+        composable(
+            route = NavigationItem.EventForm.route,
+            arguments = listOf(
+                navArgument(ARG_EVENT_ID) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ) { backStackEntry ->
+            EventFormScreen(
+                navController = navController,
+                eventId = backStackEntry.arguments?.getString(ARG_EVENT_ID)?.ifBlank { null }
+            )
         }
     }
 }

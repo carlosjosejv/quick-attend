@@ -11,7 +11,8 @@ enum class Screen {
     SIGN_UP,
     WELCOME,
     SCAN,
-    HISTORY
+    HISTORY,
+    EVENT_FORM
 }
 
 sealed class NavigationItem(val route: String) {
@@ -22,4 +23,15 @@ sealed class NavigationItem(val route: String) {
     object Welcome : NavigationItem(Screen.WELCOME.name)
     object Scan : NavigationItem(Screen.SCAN.name)
     object History : NavigationItem(Screen.HISTORY.name)
+
+    /**
+     * Create or edit an event. The optional eventId argument is empty when
+     * creating, so the same destination covers both cases.
+     */
+    object EventForm : NavigationItem("${Screen.EVENT_FORM.name}?$ARG_EVENT_ID={$ARG_EVENT_ID}") {
+        fun createRoute(eventId: String? = null): String =
+            "${Screen.EVENT_FORM.name}?$ARG_EVENT_ID=${eventId.orEmpty()}"
+    }
 }
+
+const val ARG_EVENT_ID = "eventId"

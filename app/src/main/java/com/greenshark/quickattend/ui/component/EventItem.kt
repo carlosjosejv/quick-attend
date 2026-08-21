@@ -28,6 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.Event
+import com.greenshark.quickattend.data.EventSchedule
+import com.greenshark.quickattend.data.Recurrence
+import com.greenshark.quickattend.data.ScheduleDay
+import com.greenshark.quickattend.data.TimeRange
+import com.greenshark.quickattend.data.daysSummary
+import com.greenshark.quickattend.data.timeSummary
 import com.greenshark.quickattend.ui.theme.Black
 import com.greenshark.quickattend.ui.theme.Turquoise
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
@@ -101,7 +107,7 @@ fun EventItem(event: Event, host: Boolean = false) {
                             contentDescription = null
                         )
                         Text(
-                            text = "${stringResource(R.string.date)}, ${event.date}",
+                            text = "${stringResource(R.string.date)}, ${event.schedule.daysSummary()}",
                             color = Black,
                             fontSize = 16.sp,
                             maxLines = 1,
@@ -120,7 +126,7 @@ fun EventItem(event: Event, host: Boolean = false) {
                             contentDescription = null
                         )
                         Text(
-                            text = "${stringResource(R.string.time)}, ${event.schedule}",
+                            text = "${stringResource(R.string.time)}, ${event.schedule.timeSummary()}",
                             color = Black,
                             fontSize = 16.sp,
                             maxLines = 1,
@@ -159,14 +165,16 @@ fun EventItemPreview() {
         EventItem(
             event = Event(
                 id = "1",
-                date = "May 18, 2026",
-                schedule = "13:00",
                 title = "Clase de Yoga",
                 description = "",
+                hostName = "Carlos Jiménez",
                 location = "Salon C201",
-                mapLocation = "",
                 organizerId = "1",
-                organizerName = "Carlos Jiménez"
+                organizerName = "Carlos Jiménez",
+                schedule = EventSchedule(
+                    recurrence = Recurrence.WEEKLY,
+                    days = listOf(ScheduleDay(1, TimeRange(13 * 60, 17 * 60)))
+                )
             )
         )
     }

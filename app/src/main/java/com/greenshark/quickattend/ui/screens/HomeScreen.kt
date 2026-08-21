@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.greenshark.quickattend.R
+import com.greenshark.quickattend.ui.commons.NavigationItem
 import com.greenshark.quickattend.ui.component.DayItem
 import com.greenshark.quickattend.ui.component.Shortcut
 import com.greenshark.quickattend.ui.theme.Black
@@ -105,12 +106,22 @@ fun HomeScreen(navController: NavController) {
         ) {
             Shortcut(
                 onClick = {
-
+                    navController.navigate(NavigationItem.Scan.route)
                 },
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.mark_attendance),
                 subtitle = stringResource(R.string.shortcut_1),
                 icon = R.drawable.qr_code_scanner
+            )
+
+            Shortcut(
+                onClick = {
+                    navController.navigate(NavigationItem.EventForm.createRoute())
+                },
+                modifier = Modifier.weight(1f),
+                title = stringResource(R.string.create_event),
+                subtitle = stringResource(R.string.shortcut_2),
+                icon = R.drawable.calendar_add
             )
         }
     }

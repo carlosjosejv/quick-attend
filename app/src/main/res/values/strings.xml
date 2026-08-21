@@ -32,7 +32,7 @@
     <string name="description_2">Host events, track attendees, and manage details</string>
     <string name="my_upcoming_events">My Upcoming Events</string>
     <string name="date">Date</string>
-    <string name="time">Time</string>"
+    <string name="time">Time</string>
     <string name="location">Location</string>
     <string name="attendant">Attendant</string>
     <string name="host">Host</string>
@@ -40,4 +40,46 @@
     <string name="hold_to_record_attendance">Hold to record attendance</string>
     <string name="see_details">See details</string>
     <string name="status_in_progress">In progress</string>
+
+    <!-- Event form -->
+    <string name="edit_event">Edit Event</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="event_saved">Event saved</string>
+    <string name="action_back">Back</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_cancel">Cancel</string>
+
+    <string name="section_details">Details</string>
+    <string name="section_schedule">Schedule</string>
+    <string name="section_location">Location</string>
+    <string name="section_qr">Attendance QR</string>
+
+    <string name="event_title">Title</string>
+    <string name="event_title_hint">Clase de Yoga</string>
+    <string name="event_description">Description</string>
+    <string name="host_name">Host name</string>
+    <string name="host_name_hint">Carlos Jiménez</string>
+    <string name="host_name_support">Who runs the event, shown to attendants</string>
+
+    <string name="recurrence_daily">Daily</string>
+    <string name="recurrence_weekly">Weekly</string>
+    <string name="recurrence_monthly">Monthly</string>
+    <string name="schedule_daily_hint">The event runs every day at the hours below.</string>
+    <string name="hours_per_day">Hours per day (24h)</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="error_end_before_start">End time must be after the start time</string>
+
+    <string name="location_hint">Salon C201</string>
+    <string name="address">Address</string>
+    <string name="address_hint">Av. Máximo Gómez 72, Santo Domingo</string>
+    <string name="map_location">Map location</string>
+    <string name="map_location_coming_soon">Picking a point on the map is coming soon</string>
+    <string name="location_validation">Location validation</string>
+    <string name="location_validation_description">Attendants must be at the venue to check in</string>
+    <string name="pro_badge">PRO</string>
+    <string name="pro_required">Upgrade to Pro to unlock this</string>
+
+    <string name="event_qr_code">Event QR code</string>
+    <string name="qr_hint">Attendants scan this code to record their attendance.</string>
 </resources>

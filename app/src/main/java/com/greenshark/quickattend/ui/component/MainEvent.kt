@@ -137,6 +137,9 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
             Icon(
                 painter = painterResource(R.drawable.fingerprint),
                 contentDescription = null,
@@ -149,7 +152,7 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
                 fontSize = 20.sp
             )
 
-            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

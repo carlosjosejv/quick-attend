@@ -22,14 +22,28 @@ import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 import com.greenshark.quickattend.ui.theme.Turquoise
 import com.greenshark.quickattend.ui.theme.White
 
+/**
+ * One day of the calendar row. [today] tints the day the user is actually on,
+ * [selected] marks the day whose events are being shown.
+ */
 @Composable
-fun DayItem(onClick: () -> Unit, dayName: String, dayNumber: Int, today: Boolean = false) {
+fun DayItem(
+    onClick: () -> Unit,
+    dayName: String,
+    dayNumber: Int,
+    today: Boolean = false,
+    selected: Boolean = false
+) {
     ElevatedCard(
         onClick = onClick,
         modifier = Modifier.size(width = 80.dp, height = 100.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = if (today) Turquoise.copy(alpha = 0.5f) else White,
-            contentColor = if (today) White else Black
+            containerColor = when {
+                selected -> Turquoise
+                today -> Turquoise.copy(alpha = 0.2f)
+                else -> White
+            },
+            contentColor = if (selected) White else Black
         )
     ) {
         Column(
@@ -51,6 +65,14 @@ fun DayItem(onClick: () -> Unit, dayName: String, dayNumber: Int, today: Boolean
 @Composable
 fun DayItemPreview() {
     QuickAttendTheme {
-        DayItem(onClick = {}, dayName = "Monday", dayNumber = 24, today = true)
+        DayItem(onClick = {}, dayName = "Mon", dayNumber = 24, today = true, selected = true)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DayItemTodayPreview() {
+    QuickAttendTheme {
+        DayItem(onClick = {}, dayName = "Mon", dayNumber = 24, today = true)
     }
 }

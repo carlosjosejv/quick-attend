@@ -40,6 +40,13 @@
     <string name="hold_to_record_attendance">Hold to record attendance</string>
     <string name="see_details">See details</string>
     <string name="status_in_progress">In progress</string>
+    <string name="status_upcoming">Upcoming</string>
+    <string name="starts_at">Starts at %1$s</string>
+
+    <!-- Home / upcoming events -->
+    <string name="view_all">View all</string>
+    <string name="no_upcoming_events">No upcoming events yet</string>
+    <string name="upcoming_events_description">Every event you host shows up here, closest one first.</string>
 
     <!-- Event form -->
     <string name="edit_event">Edit Event</string>
@@ -79,6 +86,28 @@
     <string name="location_validation_description">Attendants must be at the venue to check in</string>
     <string name="pro_badge">PRO</string>
     <string name="pro_required">Upgrade to Pro to unlock this</string>
+
+    <!-- Attendance detail -->
+    <string name="attendance_detail_title">My Attendance</string>
+    <string name="attendance_status_on_time">On time</string>
+    <string name="attendance_status_late">Late</string>
+    <string name="attendance_status_absent">Absent</string>
+    <string name="checked_in_at">Checked in at</string>
+    <string name="not_checked_in">No attendance recorded</string>
+    <string name="minutes_late">%1$d min late</string>
+    <string name="minutes_early">%1$d min early</string>
+    <string name="within_grace_period">Within the %1$d min grace period</string>
+    <string name="session_missed">You missed this session</string>
+    <string name="scheduled_at">Starts %1$s</string>
+    <string name="on_time_until">On time until %1$s</string>
+    <string name="attendance_score">Attendance score</string>
+    <string name="attendance_score_description">On time counts full, late counts half, absences count zero.</string>
+    <string name="attendance_history">Attendance history</string>
+    <string name="attendance_history_chart_description">How late you were on each of the last sessions.</string>
+    <string name="attendance_sessions">%1$d sessions</string>
+    <string name="no_attendance_records">This event has not run yet, so there is nothing to score.</string>
+    <string name="grace_threshold_line">%1$d min grace</string>
+    <string name="minutes_short">min</string>
 
     <string name="event_qr_code">Event QR code</string>
     <string name="qr_hint">Attendants scan this code to record their attendance.</string>

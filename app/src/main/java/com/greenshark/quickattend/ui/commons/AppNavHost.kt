@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.greenshark.quickattend.AuthViewModel
+import com.greenshark.quickattend.ui.screens.AttendanceDetailScreen
 import com.greenshark.quickattend.ui.screens.EventFormScreen
 import com.greenshark.quickattend.ui.screens.HistoryScreen
 import com.greenshark.quickattend.ui.screens.HomeScreen
@@ -15,7 +16,10 @@ import com.greenshark.quickattend.ui.screens.LoginScreen
 import com.greenshark.quickattend.ui.screens.ScanScreen
 import com.greenshark.quickattend.ui.screens.SignInScreen
 import com.greenshark.quickattend.ui.screens.SignUpScreen
+import com.greenshark.quickattend.ui.screens.UpcomingEventsScreen
 import com.greenshark.quickattend.ui.screens.WelcomeScreen
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 /**
  * Created by Carlos Jiménez on 01-Aug-24.
@@ -54,6 +58,28 @@ fun AppNavHost(
         composable(NavigationItem.History.route) {
             HistoryScreen(navController = navController)
         }
+        composable(NavigationItem.UpcomingEvents.route) {
+            UpcomingEventsScreen(navController = navController)
+        }
+        composable(
+            route = NavigationItem.AttendanceDetail.route,
+            arguments = listOf(
+                navArgument(ARG_EVENT_ID) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument(ARG_DATE) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ) { backStackEntry ->
+            AttendanceDetailScreen(
+                navController = navController,
+                eventId = backStackEntry.arguments?.getString(ARG_EVENT_ID).orEmpty(),
+                date = backStackEntry.arguments?.getString(ARG_DATE).toLocalDateOrNull()
+            )
+        }
         composable(
             route = NavigationItem.EventForm.route,
             arguments = listOf(
@@ -68,5 +94,15 @@ fun AppNavHost(
                 eventId = backStackEntry.arguments?.getString(ARG_EVENT_ID)?.ifBlank { null }
             )
         }
+    }
+}
+
+/** The date argument is empty whenever the caller had no session in mind. */
+private fun String?.toLocalDateOrNull(): LocalDate? {
+    if (isNullOrBlank()) return null
+    return try {
+        LocalDate.parse(this)
+    } catch (e: DateTimeParseException) {
+        null
     }
 }

@@ -22,4 +22,10 @@ interface EventRepository {
     suspend fun getEvent(eventId: String): DataResult<Event>
 
     suspend fun getEventsByOrganizer(organizerId: String): DataResult<List<Event>>
+
+    /** Events the user signed up to attend, which is what the home screen lists. */
+    suspend fun getEventsByAttendee(attendeeId: String): DataResult<List<Event>>
+
+    /** Signs the user up to attend an event. Doing it twice changes nothing. */
+    suspend fun joinEvent(eventId: String, attendeeId: String): DataResult<Unit>
 }

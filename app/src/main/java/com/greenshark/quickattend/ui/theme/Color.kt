@@ -22,5 +22,7 @@ val Red = Color(0xFFFF6155)
 
 val Green = Color(0xFF69F56D)
 
+val Amber = Color(0xFFFFB020)
+
 val Ghost = Color(0xFFF5F5F5)
 

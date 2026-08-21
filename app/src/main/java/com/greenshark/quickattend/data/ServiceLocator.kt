@@ -3,8 +3,10 @@
  */
 package com.greenshark.quickattend.data
 
+import com.greenshark.quickattend.data.remote.firestore.FirestoreAttendanceRepository
 import com.greenshark.quickattend.data.remote.firestore.FirestoreEventRepository
 import com.greenshark.quickattend.data.remote.firestore.FirestoreUserRepository
+import com.greenshark.quickattend.data.repository.AttendanceRepository
 import com.greenshark.quickattend.data.repository.EventRepository
 import com.greenshark.quickattend.data.repository.UserRepository
 
@@ -17,4 +19,6 @@ object ServiceLocator {
     var eventRepository: EventRepository = FirestoreEventRepository()
 
     var userRepository: UserRepository = FirestoreUserRepository()
+
+    var attendanceRepository: AttendanceRepository = FirestoreAttendanceRepository()
 }

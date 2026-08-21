@@ -22,10 +22,6 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -37,26 +33,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.Event
+import com.greenshark.quickattend.data.EventOccurrence
 import com.greenshark.quickattend.data.EventSchedule
+import com.greenshark.quickattend.data.EventStatus
 import com.greenshark.quickattend.data.Recurrence
 import com.greenshark.quickattend.data.ScheduleDay
 import com.greenshark.quickattend.data.TimeRange
-import com.greenshark.quickattend.data.timeSummary
 import com.greenshark.quickattend.ui.theme.Black
 import com.greenshark.quickattend.ui.theme.Ghost
+import com.greenshark.quickattend.ui.theme.Gray
 import com.greenshark.quickattend.ui.theme.Green
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 import com.greenshark.quickattend.ui.theme.Turquoise
 import com.greenshark.quickattend.ui.theme.White
+import java.time.LocalDate
 
+/**
+ * The event the user is meant to act on right now: either the one running or the
+ * next one still to come on the day they are looking at. Attendance can only be
+ * recorded while it is in progress, so the fingerprint is dimmed until then.
+ */
 @Composable
-fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
-
-    var delay by remember { mutableStateOf("12:00") }
+fun MainEvent(
+    onClick: () -> Unit,
+    seeDetails: () -> Unit,
+    occurrence: EventOccurrence,
+    modifier: Modifier = Modifier
+) {
+    val event = occurrence.event
+    val inProgress = occurrence.status == EventStatus.IN_PROGRESS
 
     ElevatedCard(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(containerColor = White)
     ) {
         Column(
@@ -88,7 +97,11 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
 
                 Box(
                     modifier = Modifier.background(
-                        color = Green.copy(alpha = 0.3f),
+                        color = if (inProgress) {
+                            Green.copy(alpha = 0.3f)
+                        } else {
+                            Turquoise.copy(alpha = 0.3f)
+                        },
                         shape = RoundedCornerShape(size = 32.dp)
                     )
                 ) {
@@ -100,10 +113,19 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
                         Box(
                             modifier = Modifier
                                 .size(size = 12.dp)
-                                .background(color = Green, shape = CircleShape)
+                                .background(
+                                    color = if (inProgress) Green else Turquoise,
+                                    shape = CircleShape
+                                )
                         )
                         Text(
-                            text = stringResource(R.string.status_in_progress),
+                            text = stringResource(
+                                if (inProgress) {
+                                    R.string.status_in_progress
+                                } else {
+                                    R.string.status_upcoming
+                                }
+                            ),
                             color = Black,
                             fontSize = 12.sp
                         )
@@ -130,12 +152,12 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
                     modifier = Modifier
                         .align(alignment = Alignment.CenterEnd)
                         .background(
-                            color = Green,
+                            color = if (inProgress) Green else Ghost,
                             shape = RoundedCornerShape(32.dp)
                         )
                 ) {
                     Text(
-                        text = event.schedule.timeSummary(),
+                        text = occurrence.range.format(),
                         color = Black,
                         fontSize = 16.sp,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
@@ -146,14 +168,23 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
             Spacer(modifier = Modifier.height(height = 8.dp))
 
             Icon(
-                painter = painterResource(R.drawable.fingerprint),
+                painter = painterResource(
+                    if (inProgress) R.drawable.fingerprint else R.drawable.fingerprint_off
+                ),
                 contentDescription = null,
-                tint = Turquoise,
+                tint = if (inProgress) Turquoise else Gray,
                 modifier = Modifier.size(size = 150.dp)
             )
             Text(
-                text = stringResource(R.string.hold_to_record_attendance),
-                color = Turquoise,
+                text = if (inProgress) {
+                    stringResource(R.string.hold_to_record_attendance)
+                } else {
+                    stringResource(
+                        R.string.starts_at,
+                        TimeRange.formatMinutes(occurrence.range.startMinutes)
+                    )
+                },
+                color = if (inProgress) Turquoise else Gray,
                 fontSize = 20.sp
             )
 
@@ -172,43 +203,28 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
                     modifier = Modifier.weight(weight = 1f)
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = event.organizerName,
-                        color = Black,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = 18.sp,
-                        maxLines = 1,
-                        modifier = Modifier.weight(weight = 1f)
+                FilledTonalButton(
+                    onClick = seeDetails,
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = Ghost
                     )
-                    FilledTonalButton(
-                        onClick = seeDetails,
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = Ghost
+                ) {
+                    Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.see_details),
+                            color = Black,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = 16.sp,
+                            maxLines = 1,
                         )
-                    ) {
-                        Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = stringResource(R.string.see_details),
-                                color = Black,
-                                overflow = TextOverflow.Ellipsis,
-                                fontSize = 16.sp,
-                                maxLines = 1,
-                            )
-                            Icon(
-                                painter = painterResource(R.drawable.arrow_right_alt),
-                                contentDescription = null,
-                                tint = Black
-                            )
-                        }
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_right_alt),
+                            contentDescription = null,
+                            tint = Black
+                        )
                     }
                 }
-
             }
-
         }
     }
 }
@@ -220,19 +236,38 @@ fun MainEventPreview() {
         MainEvent(
             onClick = {},
             seeDetails = {},
-            event = Event(
-                id = "1",
-                title = "Clase de Yoga",
-                description = "",
-                hostName = "Carlos Jiménez",
-                location = "Salon C201",
-                organizerId = "1",
-                organizerName = "Carlos Jiménez",
-                schedule = EventSchedule(
-                    recurrence = Recurrence.WEEKLY,
-                    days = listOf(ScheduleDay(1, TimeRange(13 * 60, 17 * 60)))
-                )
-            )
+            occurrence = previewMainOccurrence(status = EventStatus.IN_PROGRESS)
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun MainEventUpcomingPreview() {
+    QuickAttendTheme {
+        MainEvent(
+            onClick = {},
+            seeDetails = {},
+            occurrence = previewMainOccurrence(status = EventStatus.UPCOMING)
+        )
+    }
+}
+
+private fun previewMainOccurrence(status: EventStatus) = EventOccurrence(
+    event = Event(
+        id = "1",
+        title = "Clase de Yoga",
+        description = "",
+        hostName = "Carlos Jiménez",
+        location = "Salon C201",
+        organizerId = "1",
+        organizerName = "Carlos Jiménez",
+        schedule = EventSchedule(
+            recurrence = Recurrence.WEEKLY,
+            days = listOf(ScheduleDay(1, TimeRange(13 * 60, 17 * 60)))
+        )
+    ),
+    date = LocalDate.of(2026, 8, 24),
+    range = TimeRange(13 * 60, 17 * 60),
+    status = status
+)

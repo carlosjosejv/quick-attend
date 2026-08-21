@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mark_attendance">Marcar Asistencia</string>
+    <string name="create_event">Crear Evento</string>
+    <string name="shortcut_1">Escanear código QR del evento</string>
+    <string name="shortcut_2">Organiza un nuevo evento</string>
+    <string name="my_attendance_history">Mi Historial de Asistencia</string>
+    <string name="description_1">Únete rápidamente a un evento y marca tu asistencia.</string>
+    <string name="managed_events">Eventos Gestionados</string>
+    <string name="description_2">Organiza un evento e invita a los asistentes.</string>
+    <string name="my_upcoming_events">Mis próximos eventos</string>
+</resources>

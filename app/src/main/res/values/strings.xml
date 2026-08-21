@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">Quick Attend</string>
+    <string name="app_name" translatable="false">Quick Attend</string>
+    <string name="mark_attendance">Mark Attendance</string>
+    <string name="create_event">Create Event</string>
+    <string name="shortcut_1">Scan event code QR Code</string>
+    <string name="shortcut_2">Host a new event</string>
+    <string name="my_attendance_history">My Attendance History</string>
+    <string name="description_1">Quickly join an event and mark your attendance</string>
+    <string name="managed_events">Managed Events</string>
+    <string name="description_2">Host an event and invite attenders</string>
+    <string name="my_upcoming_events">My Upcoming Events</string>
 </resources>

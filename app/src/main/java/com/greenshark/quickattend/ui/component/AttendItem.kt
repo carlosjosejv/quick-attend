@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.TimerOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.Attend
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
-import com.greenshark.quickattend.ui.theme.White10
+import com.greenshark.quickattend.ui.theme.White
 
 /**
  * Created by Carlos Jiménez on 22-Aug-24.
@@ -37,7 +35,7 @@ fun AttendItem(attend: Attend = Attend()) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
-            .background(White10)
+            .background(White)
             .padding(horizontal = 20.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround

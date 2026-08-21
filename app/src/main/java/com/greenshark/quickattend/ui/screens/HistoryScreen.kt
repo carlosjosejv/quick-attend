@@ -32,7 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.Attend
 import com.greenshark.quickattend.ui.component.AttendItem
-import com.greenshark.quickattend.ui.theme.Gray10
+import com.greenshark.quickattend.ui.theme.Gray
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 
 /**
@@ -84,7 +84,7 @@ fun HistoryScreen(navController: NavController) {
 
         Text(
             textAlign = TextAlign.Center,
-            color = Gray10,
+            color = Gray,
             text = "Aquí podrás revisar y gestionar todos los registros de tus asistencias de manera clara y detallada."
 
         )

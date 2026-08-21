@@ -1,39 +1,38 @@
 package com.greenshark.quickattend.ui.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.greenshark.quickattend.R
-import com.greenshark.quickattend.ui.commons.NavigationItem
-import com.greenshark.quickattend.ui.theme.Gray10
+import com.greenshark.quickattend.ui.component.Shortcut
+import com.greenshark.quickattend.ui.theme.Black
+import com.greenshark.quickattend.ui.theme.Green10
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
+import com.greenshark.quickattend.ui.theme.White
 
 /**
  * Created by Carlos Jiménez on 01-Aug-24.
@@ -44,86 +43,170 @@ fun HomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 30.dp, vertical = 30.dp),
+            .padding(all = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(space = 16.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 16.dp,
+                alignment = Alignment.CenterHorizontally
+            )
         ) {
-            IconButton(
+            Shortcut(
                 onClick = {
 
                 },
-                modifier = Modifier
-                    .size(48.dp)
-                    .align(Alignment.TopStart)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.Black)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.add_task),
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
-
-            IconButton(
+                modifier = Modifier.weight(1f),
+                title = stringResource(R.string.mark_attendance),
+                subtitle = stringResource(R.string.shortcut_1),
+                icon = R.drawable.qr_code_scanner
+            )
+            Shortcut(
                 onClick = {
-                    navController.navigate(NavigationItem.History.route)
+
                 },
-                modifier = Modifier
-                    .size(48.dp)
-                    .align(Alignment.TopEnd)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.Black)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.list_alt_check),
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
+                modifier = Modifier.weight(1f),
+                title = stringResource(R.string.create_event),
+                subtitle = stringResource(R.string.shortcut_2),
+                icon = R.drawable.calendar_add
+            )
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = "Escanea el código QR",
-            fontSize = 25.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            textAlign = TextAlign.Center,
-            color = Gray10,
-            text = "Coloque el código QR dentro del marco para escanear. Evite agitarlo para obtener resultados rápidamente."
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Image(
-            painter = painterResource(id = R.drawable.qr_reader),
-            contentDescription = "Attend image"
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Button(
+        ElevatedCard(
             onClick = {
 
             },
-            modifier = Modifier
-                .width(300.dp)
-                .height(50.dp),
-            shape = RoundedCornerShape(5.dp),
-            colors = ButtonDefaults.buttonColors(Color.Black)
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.elevatedCardColors(containerColor = White)
         ) {
-            Text(text = "Escanear", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 8.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.schedule),
+                    contentDescription = null,
+                    tint = Green10,
+                    modifier = Modifier.size(48.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Text(
+                        text = stringResource(R.string.my_attendance_history),
+                        fontSize = 18.sp,
+                        color = Black,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        style = LocalTextStyle.current.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.Both
+                            ),
+                            lineHeight = 16.sp
+                        )
+                    )
+                    Text(
+                        text = stringResource(R.string.description_1),
+                        fontSize = 16.sp,
+                        color = Black,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = LocalTextStyle.current.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.Both
+                            ),
+                            lineHeight = 18.sp
+                        )
+                    )
+                }
+            }
+        }
+        ElevatedCard(
+            onClick = {
+
+            },
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.elevatedCardColors(containerColor = White)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 8.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.monitoring),
+                    contentDescription = null,
+                    tint = Green10,
+                    modifier = Modifier.size(48.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Text(
+                        text = stringResource(R.string.managed_events),
+                        fontSize = 18.sp,
+                        color = Black,
+                        fontWeight = FontWeight.Bold,
+                        style = LocalTextStyle.current.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.Both
+                            ),
+                            lineHeight = 16.sp
+                        )
+                    )
+                    Text(
+                        text = stringResource(R.string.description_2),
+                        fontSize = 16.sp,
+                        color = Black,
+                        overflow = TextOverflow.Ellipsis,
+                        style = LocalTextStyle.current.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.Both
+                            ),
+                            lineHeight = 18.sp
+                        )
+                    )
+                }
+            }
+        }
+        Text(
+            text = stringResource(R.string.my_upcoming_events),
+            color = Black,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            modifier = Modifier
+                .align(alignment = Alignment.Start)
+                .padding(vertical = 16.dp)
+        )
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            
         }
     }
 }

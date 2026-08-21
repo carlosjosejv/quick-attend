@@ -29,7 +29,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.ui.commons.NavigationItem
-import com.greenshark.quickattend.ui.theme.Gray10
+import com.greenshark.quickattend.ui.theme.Gray
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 
 /**
@@ -67,7 +67,7 @@ fun WelcomeScreen(navController: NavController) {
 
         Text(
             textAlign = TextAlign.Justify,
-            color = Gray10,
+            color = Gray,
             text = "¡Para empezar, necesitamos tu permiso para usar la cámara y escanear los códigos QR. Esto nos permitirá registrar tu asistencia de manera rápida y eficiente. ¡Tu privacidad es nuestra prioridad! Por favor, concede el permiso para continuar."
         )
 

@@ -39,4 +39,5 @@
 
     <string name="hold_to_record_attendance">Hold to record attendance</string>
     <string name="see_details">See details</string>
+    <string name="status_in_progress">In progress</string>
 </resources>

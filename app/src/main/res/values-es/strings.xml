@@ -39,4 +39,5 @@
 
     <string name="hold_to_record_attendance">Mantén presionado para registrar la asistencia</string>
     <string name="see_details">Ver detalles</string>
+    <string name="status_in_progress">En curso</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -38,10 +39,8 @@ import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.Event
 import com.greenshark.quickattend.ui.theme.Black
 import com.greenshark.quickattend.ui.theme.Ghost
-import com.greenshark.quickattend.ui.theme.Gray
 import com.greenshark.quickattend.ui.theme.Green
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
-import com.greenshark.quickattend.ui.theme.Red
 import com.greenshark.quickattend.ui.theme.Turquoise
 import com.greenshark.quickattend.ui.theme.White
 
@@ -80,19 +79,30 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
                         .fillMaxWidth()
                         .weight(1f)
                 )
+
+
                 Box(
-                    modifier = Modifier
-                        .background(
-                            color = Green,
-                            shape = RoundedCornerShape(32.dp)
-                        )
-                ) {
-                    Text(
-                        text = event.schedule,
-                        color = Black,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier.background(
+                        color = Green.copy(alpha = 0.3f),
+                        shape = RoundedCornerShape(size = 32.dp)
                     )
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(space = 2.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(size = 12.dp)
+                                .background(color = Green, shape = CircleShape)
+                        )
+                        Text(
+                            text = stringResource(R.string.status_in_progress),
+                            color = Black,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
             }
             Box(
@@ -111,17 +121,20 @@ fun MainEvent(onClick: () -> Unit, seeDetails: () -> Unit, event: Event) {
                     Text(text = event.location, color = Black, fontSize = 16.sp)
                 }
 
-                Row(
-                    modifier = Modifier.align(alignment = Alignment.CenterEnd),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = 2.dp)
+                Box(
+                    modifier = Modifier
+                        .align(alignment = Alignment.CenterEnd)
+                        .background(
+                            color = Green,
+                            shape = RoundedCornerShape(32.dp)
+                        )
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.timer),
-                        contentDescription = null,
-                        tint = Red
+                    Text(
+                        text = event.schedule,
+                        color = Black,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                     )
-                    Text(text = delay, color = Red, fontSize = 16.sp)
                 }
             }
             Icon(

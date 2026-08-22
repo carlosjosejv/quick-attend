@@ -186,4 +186,67 @@
 
     <string name="event_qr_code">Event QR code</string>
     <string name="qr_hint">Attendants scan this code to record their attendance.</string>
+
+    <!-- Scan -->
+    <string name="scan_title">Scan attendance QR</string>
+    <string name="scan_camera_description">Camera viewfinder</string>
+    <string name="scan_hint">Point the camera at the event QR code</string>
+    <string name="scan_torch_on">Turn the light on</string>
+    <string name="scan_torch_off">Turn the light off</string>
+    <string name="scan_resolving">Reading the code…</string>
+    <string name="scan_locating">Checking you are at the venue…</string>
+    <string name="scan_again">Scan another</string>
+
+    <string name="scan_camera_permission_title">Camera access is needed</string>
+    <string name="scan_camera_permission_description">Quick Attend uses the camera only to read event QR codes. Nothing is recorded or uploaded.</string>
+    <string name="scan_camera_permission_grant">Allow camera</string>
+    <string name="scan_camera_permission_denied">Camera access was turned down. You can switch it back on in Settings.</string>
+    <string name="scan_open_settings">Open settings</string>
+
+    <string name="scan_recorded_title">Attendance recorded</string>
+    <string name="scan_already_recorded_title">Already recorded</string>
+    <string name="scan_already_recorded_description">You scanned this session at %1$s, and that is the time on the record.</string>
+    <string name="scan_session">Session</string>
+    <string name="scan_checked_in">Checked in at</string>
+    <string name="scan_event_host">Host</string>
+    <string name="scan_distance_from_venue">%1$s from the venue</string>
+    <string name="scan_location_verified">Location verified</string>
+
+    <string name="scan_pending_title">Waiting on the host</string>
+    <string name="scan_pending_description">You are not on this event\'s list, so %1$s has been asked to add you. Your attendance is saved either way and starts counting the moment they accept.</string>
+    <string name="scan_rejected_title">Not on the list</string>
+    <string name="scan_rejected_description">The host turned down your request to join this event, so this attendance is kept but does not count towards the roll.</string>
+    <string name="scan_the_host">the host</string>
+
+    <string name="scan_error_invalid_code">That is not a Quick Attend event code</string>
+    <string name="scan_error_invalid_code_description">Scan the QR shown by the event you are attending.</string>
+    <string name="scan_error_event_not_found">This event no longer exists</string>
+    <string name="scan_error_event_not_found_description">The host may have deleted it. Ask them for the current code.</string>
+    <string name="scan_error_not_in_session">%1$s is not running right now</string>
+    <string name="scan_error_not_in_session_description">You can check in from %1$d minutes before a session starts until it ends.</string>
+    <string name="scan_error_not_signed_in">Sign in to record attendance</string>
+    <string name="scan_error_not_signed_in_description">Your attendance has to be attached to an account.</string>
+    <string name="scan_error_location_permission">Location access is needed</string>
+    <string name="scan_error_location_permission_description">This event only accepts check-ins made at the venue, so the app has to know where you are.</string>
+    <string name="scan_error_location_disabled">Location is switched off</string>
+    <string name="scan_error_location_disabled_description">Turn location on and scan again.</string>
+    <string name="scan_error_location_unavailable">Could not work out where you are</string>
+    <string name="scan_error_location_unavailable_description">Step somewhere with a clearer signal and scan again.</string>
+    <string name="scan_error_too_far">You are too far from the venue</string>
+    <string name="scan_error_too_far_description">You are %1$s away and this event accepts check-ins within %2$d m.</string>
+    <string name="scan_error_network">No connection</string>
+    <string name="scan_error_network_description">Check your network and scan again.</string>
+    <string name="scan_error_unknown">Something went wrong</string>
+    <string name="scan_error_unknown_description">Please scan again.</string>
+
+    <!-- Join requests (host) -->
+    <string name="section_requests">Attendance requests</string>
+    <string name="join_requests_pending">%1$d waiting</string>
+    <string name="join_request_scanned_at">Scanned %1$s</string>
+    <string name="join_request_accept">Accept</string>
+    <string name="join_request_ignore">Ignore</string>
+    <string name="join_request_accepted">%1$s was added to the event</string>
+    <string name="join_request_ignored">%1$s was ignored</string>
+    <string name="join_request_explainer">These people scanned the QR without being on the list. Their attendance is already saved; accepting adds it to the roll and the exports.</string>
+    <string name="no_join_requests">No requests waiting</string>
 </resources>

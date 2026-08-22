@@ -5,6 +5,7 @@ package com.greenshark.quickattend.data.repository
 
 import com.greenshark.quickattend.data.DataResult
 import com.greenshark.quickattend.data.Event
+import com.greenshark.quickattend.data.JoinRequest
 
 /**
  * Push notifications the app sends to other people. OneSignal is today's
@@ -21,4 +22,11 @@ interface NotificationSender {
         event: Event,
         attendeeIds: List<String>
     ): DataResult<Unit>
+
+    /**
+     * Tells the host that somebody who is not on the roll just checked in.
+     * Their attendance is already recorded by the time this is sent, so a
+     * failure to notify costs the host a nudge and never costs a record.
+     */
+    suspend fun notifyJoinRequested(request: JoinRequest): DataResult<Unit>
 }

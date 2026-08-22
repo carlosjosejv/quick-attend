@@ -29,6 +29,9 @@ interface EventRepository {
     /** Signs the user up to attend an event. Doing it twice changes nothing. */
     suspend fun joinEvent(eventId: String, attendeeId: String): DataResult<Unit>
 
+    /** Whether the user is already signed up, which a scan has to know. */
+    suspend fun isAttendee(eventId: String, attendeeId: String): DataResult<Boolean>
+
     /** Ids of everyone signed up for the event, in the order they joined. */
     suspend fun getAttendeeIds(eventId: String): DataResult<List<String>>
 

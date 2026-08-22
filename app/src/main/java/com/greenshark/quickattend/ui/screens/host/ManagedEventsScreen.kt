@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -54,6 +55,13 @@ fun ManagedEventsScreen(
     viewModel: ManagedEventsViewModel = viewModel(factory = ManagedEventsViewModel.Factory)
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    // Answering a request inside an event changes the badge on its card here,
+    // and this screen sits on the back stack while that happens.
+    LifecycleResumeEffect(viewModel) {
+        viewModel.refresh()
+        onPauseOrDispose {}
+    }
 
     ManagedEventsContent(
         state = state,
@@ -160,7 +168,8 @@ fun ManagedEventsContent(
                     HostEventCard(
                         event = managed.event,
                         onClick = { onEventClick(managed.event) },
-                        status = managed.status
+                        status = managed.status,
+                        pendingRequests = managed.pendingRequests
                     )
                 }
             }
@@ -183,7 +192,10 @@ fun ManagedEventsContentPreview() {
             state = ManagedEventsState(
                 events = listOf(
                     ManagedEvent(previewHostEvent(), EventStatus.IN_PROGRESS),
-                    ManagedEvent(previewHostEvent().copy(id = "2", title = "Taller de Diseño"))
+                    ManagedEvent(
+                        event = previewHostEvent().copy(id = "2", title = "Taller de Diseño"),
+                        pendingRequests = 3
+                    )
                 )
             ),
             onBack = {},

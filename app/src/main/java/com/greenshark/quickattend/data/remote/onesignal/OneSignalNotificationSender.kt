@@ -6,6 +6,7 @@ package com.greenshark.quickattend.data.remote.onesignal
 import com.greenshark.quickattend.data.DataError
 import com.greenshark.quickattend.data.DataResult
 import com.greenshark.quickattend.data.Event
+import com.greenshark.quickattend.data.JoinRequest
 import com.greenshark.quickattend.data.daysSummary
 import com.greenshark.quickattend.data.repository.NotificationSender
 import com.greenshark.quickattend.data.timeSummary
@@ -50,6 +51,30 @@ class OneSignalNotificationSender(
             put("contents", JSONObject().put("en", event.scheduleChangeMessage()))
             // Carried through so tapping the push can open the event straight away.
             put("data", JSONObject().put("eventId", event.id))
+        }
+
+        return withContext(Dispatchers.IO) { post(body) }
+    }
+
+    override suspend fun notifyJoinRequested(request: JoinRequest): DataResult<Unit> {
+        if (request.hostId.isBlank()) return DataResult.Failure(DataError.NOT_FOUND)
+        if (appId.isBlank() || restApiKey.isBlank()) {
+            return DataResult.Failure(DataError.UNAUTHORIZED)
+        }
+
+        val body = JSONObject().apply {
+            put("app_id", appId)
+            put("target_channel", "push")
+            put("include_aliases", JSONObject().apply {
+                put("external_id", JSONArray(listOf(request.hostId)))
+            })
+            put("headings", JSONObject().put("en", "New attendance request"))
+            put("contents", JSONObject().put("en", request.joinRequestMessage()))
+            // Carried through so tapping the push can open the event's requests.
+            put("data", JSONObject().apply {
+                put("eventId", request.eventId)
+                put("joinRequestId", request.id)
+            })
         }
 
         return withContext(Dispatchers.IO) { post(body) }
@@ -100,3 +125,11 @@ class OneSignalNotificationSender(
 /** "Now Mon, Wed 13:00 - 17:00", short enough to read in a notification shade. */
 internal fun Event.scheduleChangeMessage(): String =
     "Now ${schedule.daysSummary()} · ${schedule.timeSummary()}"
+
+/**
+ * "Ana Reyes checked into Clase de Yoga without being on the roll". The host
+ * reads this on a lock screen, so it says who and where and nothing else.
+ */
+internal fun JoinRequest.joinRequestMessage(): String =
+    "$displayName checked into ${eventTitle.ifBlank { "your event" }} " +
+            "without being on the roll"

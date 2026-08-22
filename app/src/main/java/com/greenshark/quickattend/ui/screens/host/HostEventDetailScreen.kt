@@ -3,6 +3,7 @@
  */
 package com.greenshark.quickattend.ui.screens.host
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -57,9 +58,12 @@ import com.greenshark.quickattend.ui.component.host.AttendeeRow
 import com.greenshark.quickattend.ui.component.host.AttendeeSearchField
 import com.greenshark.quickattend.ui.component.host.AttendeeSortRow
 import com.greenshark.quickattend.ui.component.host.EventOverviewCard
+import com.greenshark.quickattend.ui.component.host.JoinRequestRow
 import com.greenshark.quickattend.ui.component.host.previewAttendee
 import com.greenshark.quickattend.ui.component.host.previewHostEvent
+import com.greenshark.quickattend.ui.component.host.previewJoinRequest
 import com.greenshark.quickattend.ui.component.host.scheduleLine
+import com.greenshark.quickattend.ui.theme.Amber
 import com.greenshark.quickattend.ui.theme.Black
 import com.greenshark.quickattend.ui.theme.Gray
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
@@ -97,6 +101,14 @@ fun HostEventDetailScreen(
                     snackbarHostState.showMessage(resources.getString(R.string.event_deleted))
                     navController.popBackStack()
                 }
+
+                is HostEventDetailEvent.RequestAccepted -> snackbarHostState.showMessage(
+                    resources.getString(R.string.join_request_accepted, event.name)
+                )
+
+                is HostEventDetailEvent.RequestIgnored -> snackbarHostState.showMessage(
+                    resources.getString(R.string.join_request_ignored, event.name)
+                )
 
                 is HostEventDetailEvent.Error ->
                     snackbarHostState.showMessage(event.error.message())
@@ -234,6 +246,42 @@ fun HostEventDetailContent(
                     )
                 }
 
+                if (state.hasPendingRequests) {
+                    item(key = "requests-title") {
+                        SectionTitle(
+                            text = stringResource(R.string.section_requests),
+                            icon = R.drawable.pending,
+                            trailing = {
+                                PendingRequestsBadge(count = state.pendingRequests.size)
+                            }
+                        )
+                    }
+
+                    item(key = "requests-explainer") {
+                        Text(
+                            text = stringResource(R.string.join_request_explainer),
+                            color = Gray,
+                            fontSize = 14.sp
+                        )
+                    }
+
+                    items(
+                        items = state.pendingRequests,
+                        key = { request -> request.key }
+                    ) { request ->
+                        JoinRequestRow(
+                            request = request,
+                            onAccept = {
+                                onAction(HostEventDetailAction.RequestAccepted(request))
+                            },
+                            onIgnore = {
+                                onAction(HostEventDetailAction.RequestIgnored(request))
+                            },
+                            enabled = request.id !in state.answeringRequestIds
+                        )
+                    }
+                }
+
                 item(key = "overview-title") {
                     SectionTitle(
                         text = stringResource(R.string.section_overview),
@@ -330,6 +378,23 @@ fun HostEventDetailContent(
             destructive = true
         )
     }
+}
+
+/** The count beside the requests heading, so it reads as an inbox. */
+@Composable
+private fun PendingRequestsBadge(count: Int) {
+    Text(
+        text = stringResource(R.string.join_requests_pending, count),
+        color = Black,
+        fontWeight = FontWeight.Medium,
+        fontSize = 13.sp,
+        modifier = Modifier
+            .background(
+                color = Amber.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(size = 32.dp)
+            )
+            .padding(horizontal = 10.dp, vertical = 4.dp)
+    )
 }
 
 @Composable
@@ -444,6 +509,10 @@ private fun previewHostState(): HostEventDetailState {
     return HostEventDetailState(
         event = previewHostEvent(),
         attendees = attendees,
+        requests = listOf(
+            previewJoinRequest(name = "Marta Núñez"),
+            previewJoinRequest(name = "Diego Santos")
+        ),
         overview = EventAttendanceOverview(
             attendees = attendees.size,
             sessions = 12,

@@ -34,6 +34,21 @@ fun AttendanceDto.toCheckIn(zone: ZoneId = ZoneId.systemDefault()): AttendanceCh
     )
 }
 
+fun AttendanceCheckIn.toDto(zone: ZoneId = ZoneId.systemDefault()): AttendanceDto = AttendanceDto(
+    userId = userId,
+    eventId = eventId,
+    date = date.toString(),
+    checkInAt = checkInAt.atZone(zone).toInstant().toEpochMilli()
+)
+
+/**
+ * Deterministic id: one document per attendant, event and run. Scanning twice
+ * lands on the same document instead of piling up rows the roll would have to
+ * de-duplicate later.
+ */
+fun attendanceId(userId: String, eventId: String, date: LocalDate): String =
+    "${userId}_${eventId}_$date"
+
 private fun String.toLocalDateOrNull(): LocalDate? = try {
     LocalDate.parse(this)
 } catch (e: DateTimeParseException) {

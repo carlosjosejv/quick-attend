@@ -16,12 +16,16 @@ import com.greenshark.quickattend.data.DataError
 import com.greenshark.quickattend.data.DataResult
 import com.greenshark.quickattend.data.Event
 import com.greenshark.quickattend.data.EventAttendanceOverview
+import com.greenshark.quickattend.data.JoinRequest
+import com.greenshark.quickattend.data.JoinRequestStatus
 import com.greenshark.quickattend.data.ServiceLocator
 import com.greenshark.quickattend.data.attendeeAttendance
 import com.greenshark.quickattend.data.filteredBy
 import com.greenshark.quickattend.data.overview
+import com.greenshark.quickattend.data.pending
 import com.greenshark.quickattend.data.repository.AttendanceRepository
 import com.greenshark.quickattend.data.repository.EventRepository
+import com.greenshark.quickattend.data.repository.JoinRequestRepository
 import com.greenshark.quickattend.data.repository.UserRepository
 import com.greenshark.quickattend.data.sortedBy
 import kotlinx.coroutines.channels.Channel
@@ -41,6 +45,10 @@ data class HostEventDetailState(
     /** Every attendant with their whole history, before search and sorting. */
     val attendees: List<AttendeeAttendance> = emptyList(),
     val overview: EventAttendanceOverview = EventAttendanceOverview(),
+    /** People who scanned the QR without being on the roll, newest first. */
+    val requests: List<JoinRequest> = emptyList(),
+    /** Requests being answered right now, so their row stops taking taps. */
+    val answeringRequestIds: Set<String> = emptySet(),
     val query: String = "",
     val sort: AttendeeSort = AttendeeSort.NAME,
     /** Attendant the host is about to remove, held while the dialog is up. */
@@ -60,6 +68,10 @@ data class HostEventDetailState(
     val isFilteredEmpty: Boolean get() = hasAttendees && visibleAttendees.isEmpty()
 
     val canExport: Boolean get() = event != null && !isLoading
+
+    val pendingRequests: List<JoinRequest> get() = requests.pending()
+
+    val hasPendingRequests: Boolean get() = pendingRequests.isNotEmpty()
 }
 
 sealed interface HostEventDetailAction {
@@ -71,12 +83,16 @@ sealed interface HostEventDetailAction {
     data object DeleteRequested : HostEventDetailAction
     data object DeleteConfirmed : HostEventDetailAction
     data object DeleteDismissed : HostEventDetailAction
+    data class RequestAccepted(val request: JoinRequest) : HostEventDetailAction
+    data class RequestIgnored(val request: JoinRequest) : HostEventDetailAction
     data object Refresh : HostEventDetailAction
 }
 
 sealed interface HostEventDetailEvent {
     data class AttendeeRemoved(val name: String) : HostEventDetailEvent
     data object EventDeleted : HostEventDetailEvent
+    data class RequestAccepted(val name: String) : HostEventDetailEvent
+    data class RequestIgnored(val name: String) : HostEventDetailEvent
     data class Error(val error: DataError) : HostEventDetailEvent
 }
 
@@ -92,6 +108,7 @@ class HostEventDetailViewModel(
     private val eventRepository: EventRepository = ServiceLocator.eventRepository,
     private val userRepository: UserRepository = ServiceLocator.userRepository,
     private val attendanceRepository: AttendanceRepository = ServiceLocator.attendanceRepository,
+    private val joinRequestRepository: JoinRequestRepository = ServiceLocator.joinRequestRepository,
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 ) : ViewModel() {
 
@@ -129,6 +146,16 @@ class HostEventDetailViewModel(
 
             HostEventDetailAction.DeleteConfirmed -> deleteEvent()
 
+            is HostEventDetailAction.RequestAccepted -> answer(
+                request = action.request,
+                status = JoinRequestStatus.APPROVED
+            )
+
+            is HostEventDetailAction.RequestIgnored -> answer(
+                request = action.request,
+                status = JoinRequestStatus.REJECTED
+            )
+
             HostEventDetailAction.Refresh -> load()
         }
     }
@@ -140,6 +167,10 @@ class HostEventDetailViewModel(
         }
 
         _state.update { it.copy(isLoading = true, error = null) }
+        // Requests are fetched on their own, because the roll has several early
+        // exits — an event with nobody signed up still has people asking to be.
+        loadRequests()
+
         viewModelScope.launch {
             val event = when (val result = eventRepository.getEvent(eventId)) {
                 is DataResult.Success -> result.data
@@ -198,6 +229,79 @@ class HostEventDetailViewModel(
                 )
             }
         }
+    }
+
+    private fun loadRequests() {
+        viewModelScope.launch {
+            when (val result = joinRequestRepository.getRequestsForEvent(eventId)) {
+                is DataResult.Success -> _state.update { it.copy(requests = result.data) }
+                // The roll is the point of this screen; failing to read the
+                // requests should not paint an error over all of it.
+                is DataResult.Failure -> Unit
+            }
+        }
+    }
+
+    /**
+     * Answers one request. Approving writes the sign-up as well as the status,
+     * because it is the sign-up that puts the person on the roll and their
+     * already recorded check-ins into every export.
+     */
+    private fun answer(request: JoinRequest, status: JoinRequestStatus) {
+        if (request.id in _state.value.answeringRequestIds) return
+        _state.update { it.copy(answeringRequestIds = it.answeringRequestIds + request.id) }
+
+        viewModelScope.launch {
+            val result = joinRequestRepository.setStatus(
+                requestId = request.id,
+                status = status
+            )
+            if (result is DataResult.Failure) {
+                clearAnswering(request)
+                _events.send(HostEventDetailEvent.Error(result.error))
+                return@launch
+            }
+
+            if (status == JoinRequestStatus.APPROVED) {
+                val joined = eventRepository.joinEvent(
+                    eventId = eventId,
+                    attendeeId = request.userId
+                )
+                if (joined is DataResult.Failure) {
+                    // The status moved but the sign-up did not, so the request
+                    // is put back to pending rather than vanishing unanswered.
+                    joinRequestRepository.setStatus(request.id, JoinRequestStatus.PENDING)
+                    clearAnswering(request)
+                    _events.send(HostEventDetailEvent.Error(joined.error))
+                    return@launch
+                }
+            }
+
+            _state.update { state ->
+                state.copy(
+                    requests = state.requests.map { existing ->
+                        if (existing.id == request.id) existing.copy(status = status) else existing
+                    },
+                    answeringRequestIds = state.answeringRequestIds - request.id
+                )
+            }
+
+            _events.send(
+                if (status == JoinRequestStatus.APPROVED) {
+                    HostEventDetailEvent.RequestAccepted(request.displayName)
+                } else {
+                    HostEventDetailEvent.RequestIgnored(request.displayName)
+                }
+            )
+
+            // A new attendant brings their whole history onto the roll with
+            // them, which only a reload can work out.
+            if (status == JoinRequestStatus.APPROVED) load()
+        }
+    }
+
+    private fun clearAnswering(request: JoinRequest) {
+        _state.update { it.copy(answeringRequestIds = it.answeringRequestIds - request.id) }
     }
 
     private fun removePendingAttendee() {

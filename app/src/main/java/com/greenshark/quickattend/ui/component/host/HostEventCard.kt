@@ -39,6 +39,7 @@ import com.greenshark.quickattend.data.ScheduleDay
 import com.greenshark.quickattend.data.TimeRange
 import com.greenshark.quickattend.data.daysSummary
 import com.greenshark.quickattend.data.timeSummary
+import com.greenshark.quickattend.ui.theme.Amber
 import com.greenshark.quickattend.ui.theme.Black
 import com.greenshark.quickattend.ui.theme.Gray
 import com.greenshark.quickattend.ui.theme.Green
@@ -57,7 +58,9 @@ fun HostEventCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     attendeeCount: Int? = null,
-    status: EventStatus? = null
+    status: EventStatus? = null,
+    /** People waiting to be let onto this event's roll, zero when there are none. */
+    pendingRequests: Int = 0
 ) {
     ElevatedCard(
         onClick = onClick,
@@ -93,6 +96,16 @@ fun HostEventCard(
                             .semantics { contentDescription = inProgress }
                     )
                 }
+            }
+
+            if (pendingRequests > 0) {
+                // Amber and above the schedule, because it is the only line on
+                // the card the host has to act on rather than just read.
+                DetailLine(
+                    icon = R.drawable.pending,
+                    text = stringResource(R.string.join_requests_pending, pendingRequests),
+                    tint = Amber
+                )
             }
 
             DetailLine(icon = R.drawable.schedule, text = event.schedule.scheduleLine())
@@ -144,6 +157,7 @@ fun HostEventCardPreview() {
             onClick = {},
             attendeeCount = 24,
             status = EventStatus.IN_PROGRESS,
+            pendingRequests = 2,
             modifier = Modifier.padding(all = 12.dp)
         )
     }

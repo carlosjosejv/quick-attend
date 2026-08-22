@@ -88,6 +88,11 @@ class FirestoreEventRepository(
             Unit
         }
 
+    override suspend fun isAttendee(eventId: String, attendeeId: String): DataResult<Boolean> =
+        runCatchingFirestore {
+            enrollments.document(enrollmentId(attendeeId, eventId)).get().await().exists()
+        }
+
     override suspend fun getAttendeeIds(eventId: String): DataResult<List<String>> =
         runCatchingFirestore {
             enrollments

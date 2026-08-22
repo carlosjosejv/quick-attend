@@ -66,6 +66,15 @@ data class EventSchedule(
     fun isSelected(dayKey: Int): Boolean = days.any { it.dayKey == dayKey }
 }
 
+/**
+ * Whether two schedules put the event on the same days at the same hours.
+ *
+ * Plain equality would not do: [EventSchedule.days] is a list, so toggling a
+ * day off and back on reorders it and makes an unchanged schedule look edited.
+ */
+fun EventSchedule.sameHoursAs(other: EventSchedule): Boolean =
+    recurrence == other.recurrence && orderedDays == other.orderedDays
+
 /** "Every day", "Mon, Wed, Fri" or "Day 1, 15 of each month". */
 fun EventSchedule.daysSummary(locale: Locale = Locale.getDefault()): String = when (recurrence) {
     Recurrence.DAILY -> "Every day"

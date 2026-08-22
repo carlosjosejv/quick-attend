@@ -28,4 +28,16 @@ interface EventRepository {
 
     /** Signs the user up to attend an event. Doing it twice changes nothing. */
     suspend fun joinEvent(eventId: String, attendeeId: String): DataResult<Unit>
+
+    /** Ids of everyone signed up for the event, in the order they joined. */
+    suspend fun getAttendeeIds(eventId: String): DataResult<List<String>>
+
+    /**
+     * Drops the attendant's sign-up. Their past check-ins are left alone, so
+     * removing someone by mistake and adding them back restores their history.
+     */
+    suspend fun removeAttendee(eventId: String, attendeeId: String): DataResult<Unit>
+
+    /** Deletes the event along with every sign-up and check-in recorded for it. */
+    suspend fun deleteEvent(eventId: String): DataResult<Unit>
 }

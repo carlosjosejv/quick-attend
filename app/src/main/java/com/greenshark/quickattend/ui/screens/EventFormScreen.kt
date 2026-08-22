@@ -3,6 +3,7 @@
  */
 package com.greenshark.quickattend.ui.screens
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -74,13 +76,15 @@ fun EventFormScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val savedMessage = stringResource(R.string.event_saved)
+    // LocalResources rather than LocalContext, so the message follows a locale
+    // change instead of going stale on the one the form opened in.
+    val resources = LocalResources.current
 
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
                 is EventFormEvent.Saved -> {
-                    snackbarHostState.showMessage(savedMessage)
+                    snackbarHostState.showMessage(resources.savedMessage(event.attendeesNotified))
                     navController.popBackStack()
                 }
 
@@ -287,6 +291,18 @@ private fun ScheduleSummary(schedule: EventSchedule, modifier: Modifier = Modifi
         Text(text = schedule.timeSummary(), color = Gray, fontSize = 14.sp)
     }
 }
+
+/**
+ * Says whether the attendants heard about it, but only when the schedule was
+ * what changed; an ordinary save just says it saved.
+ */
+private fun Resources.savedMessage(attendeesNotified: Boolean?): String = getString(
+    when (attendeesNotified) {
+        null -> R.string.event_saved
+        true -> R.string.schedule_change_notified
+        false -> R.string.schedule_change_not_notified
+    }
+)
 
 private suspend fun SnackbarHostState.showMessage(message: String) {
     currentSnackbarData?.dismiss()

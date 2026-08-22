@@ -22,6 +22,20 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Supplied by gradle.properties or a CI environment variable, never by
+        // source. The app id is public; the REST key is not, so a release build
+        // should leave it empty and send through a server that holds it.
+        buildConfigField(
+            "String",
+            "ONESIGNAL_APP_ID",
+            "\"${providers.gradleProperty("onesignalAppId").getOrElse("")}\""
+        )
+        buildConfigField(
+            "String",
+            "ONESIGNAL_REST_API_KEY",
+            "\"${providers.gradleProperty("onesignalRestApiKey").getOrElse("")}\""
+        )
     }
 
     buildTypes {
@@ -39,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {
@@ -90,4 +105,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.zxing.core)
+    implementation(libs.onesignal)
 }

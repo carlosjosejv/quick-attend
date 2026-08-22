@@ -3,6 +3,7 @@
  */
 package com.greenshark.quickattend.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,12 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -39,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.AttendanceRecord
+import com.greenshark.quickattend.data.AttendanceSignature
 import com.greenshark.quickattend.data.AttendanceStatus
 import com.greenshark.quickattend.data.DataError
 import com.greenshark.quickattend.data.summarize
@@ -49,7 +53,11 @@ import com.greenshark.quickattend.ui.component.attendance.AttendanceRecordRow
 import com.greenshark.quickattend.ui.component.attendance.AttendanceScoreRing
 import com.greenshark.quickattend.ui.component.attendance.previewAttendanceEvent
 import com.greenshark.quickattend.ui.component.attendance.previewRecords
+import com.greenshark.quickattend.ui.component.common.SectionTitle
+import com.greenshark.quickattend.ui.component.signature.SignatureCaptureDialog
+import com.greenshark.quickattend.ui.component.signature.SignatureView
 import com.greenshark.quickattend.ui.theme.Black
+import com.greenshark.quickattend.ui.theme.Ghost
 import com.greenshark.quickattend.ui.theme.Gray
 import com.greenshark.quickattend.ui.theme.QuickAttendTheme
 import com.greenshark.quickattend.ui.theme.Red
@@ -152,8 +160,27 @@ fun AttendanceDetailContent(
                 }
             }
 
+            item(key = "signature-title") {
+                SectionTitle(
+                    text = stringResource(R.string.signature),
+                    icon = R.drawable.draw
+                )
+            }
+
+            item(key = "signature") {
+                SignatureSection(
+                    signature = state.selectedSignature,
+                    hasImage = state.signatureImage.isNotBlank(),
+                    isSaving = state.isSavingSignature,
+                    onEdit = { onAction(AttendanceDetailAction.SignatureRequested) }
+                )
+            }
+
             item(key = "score") {
-                SectionTitle(text = stringResource(R.string.attendance_score))
+                SectionTitle(
+                    text = stringResource(R.string.attendance_score),
+                    icon = R.drawable.monitoring
+                )
             }
 
             item(key = "ring") {
@@ -190,7 +217,10 @@ fun AttendanceDetailContent(
 
             item(key = "chart") {
                 Column(verticalArrangement = Arrangement.spacedBy(space = 8.dp)) {
-                    SectionTitle(text = stringResource(R.string.attendance_history))
+                    SectionTitle(
+                        text = stringResource(R.string.attendance_history),
+                        icon = R.drawable.monitoring
+                    )
                     Text(
                         text = stringResource(R.string.attendance_history_chart_description),
                         color = Gray,
@@ -212,6 +242,58 @@ fun AttendanceDetailContent(
             }
         }
     }
+
+    if (state.isSigning) {
+        SignatureCaptureDialog(
+            onSigned = { onAction(AttendanceDetailAction.SignatureDrawn(it)) },
+            onDismiss = { onAction(AttendanceDetailAction.SignatureDismissed) },
+            existingSignature = state.signatureImage,
+            onRemove = { onAction(AttendanceDetailAction.SignatureRemoved) }
+        )
+    }
+}
+
+/**
+ * The signature this attendant's records carry, and the way to change it. An
+ * attendant with no drawing signs with a code, which is spelled out here rather
+ * than left to be discovered on an exported sheet.
+ */
+@Composable
+private fun SignatureSection(
+    signature: AttendanceSignature,
+    hasImage: Boolean,
+    isSaving: Boolean,
+    onEdit: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Ghost, shape = RoundedCornerShape(size = 16.dp))
+            .padding(all = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        SignatureView(signature = signature)
+
+        if (!hasImage) {
+            Text(
+                text = stringResource(R.string.signature_code_explained),
+                color = Gray,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        TextButton(onClick = onEdit, enabled = !isSaving) {
+            Text(
+                text = stringResource(
+                    if (hasImage) R.string.signature_title else R.string.signature_set_yours
+                ),
+                color = Turquoise,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }
 
 private fun DataError.message(): String = when (this) {
@@ -219,25 +301,6 @@ private fun DataError.message(): String = when (this) {
     DataError.UNAUTHORIZED -> "Sign in again to see your attendance."
     DataError.NOT_FOUND -> "This event no longer exists."
     DataError.UNKNOWN -> "Something went wrong. Please try again."
-}
-
-@Composable
-private fun SectionTitle(text: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.monitoring),
-            contentDescription = null,
-            tint = Turquoise,
-            modifier = Modifier.size(size = 20.dp)
-        )
-        Text(text = text, color = Black, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-    }
 }
 
 @Preview(showBackground = true, heightDp = 1400)

@@ -109,6 +109,81 @@
     <string name="grace_threshold_line">%1$d min grace</string>
     <string name="minutes_short">min</string>
 
+
+    <!-- Managed events (host) -->
+    <string name="managed_events_description">Events you host. Open one to see who is attending.</string>
+    <string name="no_managed_events">You are not hosting anything yet</string>
+    <string name="no_managed_events_description">Create an event and its attendance QR is ready to scan straight away.</string>
+    <string name="attendee_count">%1$d signed up</string>
+    <string name="attendee_breakdown">%1$d on time · %2$d late · %3$d absent</string>
+
+    <!-- Event detail (host) -->
+    <string name="event_detail_title">Event</string>
+    <string name="section_attendants">Attendants</string>
+    <string name="section_overview">Overview</string>
+    <string name="overview_attendants">Attendants</string>
+    <string name="overview_sessions">Sessions</string>
+    <string name="overview_average">Average</string>
+    <string name="search_attendants">Search attendants</string>
+    <string name="sort_by_name">Name</string>
+    <string name="sort_by_score">Score</string>
+    <string name="sort_by_absences">Absences</string>
+    <string name="no_attendants">Nobody has signed up yet</string>
+    <string name="no_attendants_description">Attendants appear here as soon as they scan the event QR.</string>
+    <string name="no_attendants_match">No attendant matches that search</string>
+
+    <string name="action_edit_schedule">Edit schedule</string>
+    <string name="action_delete_event">Delete event</string>
+    <string name="action_export">Export</string>
+    <string name="action_share">Share</string>
+    <string name="action_open">Open</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_done">Done</string>
+
+    <string name="remove_attendee">Remove attendant</string>
+    <string name="remove_attendee_of">Remove %1$s</string>
+    <string name="remove_attendee_message">%1$s stops seeing this event and drops off the roll. Their past attendance is kept, so adding them back restores it.</string>
+    <string name="attendee_removed">%1$s was removed</string>
+
+    <string name="delete_event_title">Delete this event?</string>
+    <string name="delete_event_message">Every sign-up and attendance record for %1$s is deleted with it. This cannot be undone.</string>
+    <string name="event_deleted">Event deleted</string>
+
+    <string name="schedule_change_notified">Attendants were notified of the new schedule</string>
+    <string name="schedule_change_not_notified">Schedule saved, but attendants could not be notified</string>
+
+    <!-- Attendee detail (host) -->
+    <string name="attendee_detail_title">Attendant</string>
+    <string name="attendee_sessions">Sessions</string>
+    <string name="export_this_attendant">Export this attendant</string>
+
+    <!-- Signature -->
+    <string name="signature">Signature</string>
+    <string name="signature_title">Your signature</string>
+    <string name="signature_description">Draw the signature that goes on every attendance record you appear in.</string>
+    <string name="signature_current">On file</string>
+    <string name="signature_pad_hint">Sign here</string>
+    <string name="signature_clear">Clear</string>
+    <string name="signature_save">Save</string>
+    <string name="signature_remove">Remove</string>
+    <string name="signature_none">--</string>
+    <string name="signature_on_file">Signature on file</string>
+    <string name="signature_saved">Signature saved</string>
+    <string name="signature_set_yours">Set your signature</string>
+    <string name="signature_code_explained">Without a drawn signature, records are signed with a unique code derived from your account and the session.</string>
+
+    <!-- Export -->
+    <string name="export_title">Export attendance</string>
+    <string name="export_format_pdf">PDF</string>
+    <string name="export_format_excel">Excel</string>
+    <string name="export_preview">Preview</string>
+    <string name="export_rows">%1$d rows</string>
+    <string name="export_failed">The file could not be created. Please try again.</string>
+    <string name="export_no_app">No app on this phone can open that file.</string>
+    <string name="export_page_of">Page %1$d of %2$d</string>
+    <string name="export_preview_truncated">Showing the first %1$d pages. The shared file has all of them.</string>
+    <string name="export_excel_note">Signatures are exported as their code, because a spreadsheet cell cannot hold the drawing.</string>
+
     <string name="event_qr_code">Event QR code</string>
     <string name="qr_hint">Attendants scan this code to record their attendance.</string>
 </resources>

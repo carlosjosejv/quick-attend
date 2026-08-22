@@ -16,9 +16,11 @@ import com.greenshark.quickattend.data.EventSchedule
 import com.greenshark.quickattend.data.MapLocation
 import com.greenshark.quickattend.data.Recurrence
 import com.greenshark.quickattend.data.ScheduleDay
+import com.greenshark.quickattend.data.sameHoursAs
 import com.greenshark.quickattend.data.ServiceLocator
 import com.greenshark.quickattend.data.TimeRange
 import com.greenshark.quickattend.data.repository.EventRepository
+import com.greenshark.quickattend.data.repository.NotificationSender
 import com.greenshark.quickattend.data.repository.UserRepository
 import com.greenshark.quickattend.qr.QrCodeGenerator
 import kotlinx.coroutines.channels.Channel
@@ -69,7 +71,13 @@ sealed interface EventFormAction {
 }
 
 sealed interface EventFormEvent {
-    data class Saved(val event: Event) : EventFormEvent
+    /**
+     * [attendeesNotified] is null when the save did not move the schedule, so
+     * nobody needed telling; true or false when it did and the push either
+     * went out or did not.
+     */
+    data class Saved(val event: Event, val attendeesNotified: Boolean? = null) : EventFormEvent
+
     data class Error(val error: DataError) : EventFormEvent
 }
 
@@ -77,6 +85,7 @@ class EventFormViewModel(
     private val eventId: String?,
     private val eventRepository: EventRepository = ServiceLocator.eventRepository,
     private val userRepository: UserRepository = ServiceLocator.userRepository,
+    private val notificationSender: NotificationSender = ServiceLocator.notificationSender,
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 ) : ViewModel() {
 
@@ -85,6 +94,13 @@ class EventFormViewModel(
 
     private val _events = Channel<EventFormEvent>(Channel.BUFFERED)
     val events: Flow<EventFormEvent> = _events.receiveAsFlow()
+
+    /**
+     * The hours the event had when it was loaded. Compared against on save so a
+     * push only goes out when the schedule actually moved, and not when the
+     * host merely fixed a typo in the description.
+     */
+    private var scheduleOnLoad: EventSchedule? = null
 
     init {
         val user = auth.currentUser
@@ -159,7 +175,10 @@ class EventFormViewModel(
     private fun loadEvent(id: String) {
         viewModelScope.launch {
             when (val result = eventRepository.getEvent(id)) {
-                is DataResult.Success -> _state.update { it.fromEvent(result.data) }
+                is DataResult.Success -> {
+                    scheduleOnLoad = result.data.schedule
+                    _state.update { it.fromEvent(result.data) }
+                }
                 is DataResult.Failure -> {
                     _state.update { it.copy(isLoading = false) }
                     _events.send(EventFormEvent.Error(result.error))
@@ -176,17 +195,49 @@ class EventFormViewModel(
         _state.update { it.copy(isSaving = true) }
         viewModelScope.launch {
             val event = validated.toEvent()
+            val scheduleMoved = validated.isEditing &&
+                    scheduleOnLoad?.sameHoursAs(event.schedule) == false
+
             val result = if (validated.isEditing) {
                 eventRepository.updateEvent(event)
             } else {
                 eventRepository.createEvent(event)
             }
             _state.update { it.copy(isSaving = false) }
+
             when (result) {
-                is DataResult.Success -> _events.send(EventFormEvent.Saved(result.data))
+                is DataResult.Success -> {
+                    scheduleOnLoad = result.data.schedule
+                    // Notifying comes after the write and never blocks it: a
+                    // saved schedule that nobody heard about still beats losing
+                    // the edit because a push failed.
+                    val notified = if (scheduleMoved) {
+                        notifyAttendees(result.data)
+                    } else {
+                        null
+                    }
+                    _events.send(
+                        EventFormEvent.Saved(event = result.data, attendeesNotified = notified)
+                    )
+                }
+
                 is DataResult.Failure -> _events.send(EventFormEvent.Error(result.error))
             }
         }
+    }
+
+    /** True once the push is accepted; false if anything about it failed. */
+    private suspend fun notifyAttendees(event: Event): Boolean {
+        val attendeeIds = when (val result = eventRepository.getAttendeeIds(event.id)) {
+            is DataResult.Success -> result.data
+            is DataResult.Failure -> return false
+        }
+        if (attendeeIds.isEmpty()) return true
+
+        return notificationSender.notifyScheduleChanged(
+            event = event,
+            attendeeIds = attendeeIds
+        ) is DataResult.Success
     }
 
     companion object {

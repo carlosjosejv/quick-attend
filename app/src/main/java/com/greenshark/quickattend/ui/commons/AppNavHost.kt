@@ -18,6 +18,10 @@ import com.greenshark.quickattend.ui.screens.SignInScreen
 import com.greenshark.quickattend.ui.screens.SignUpScreen
 import com.greenshark.quickattend.ui.screens.UpcomingEventsScreen
 import com.greenshark.quickattend.ui.screens.WelcomeScreen
+import com.greenshark.quickattend.ui.screens.host.ExportPreviewScreen
+import com.greenshark.quickattend.ui.screens.host.HostAttendeeDetailScreen
+import com.greenshark.quickattend.ui.screens.host.HostEventDetailScreen
+import com.greenshark.quickattend.ui.screens.host.ManagedEventsScreen
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -60,6 +64,47 @@ fun AppNavHost(
         }
         composable(NavigationItem.UpcomingEvents.route) {
             UpcomingEventsScreen(navController = navController)
+        }
+        composable(NavigationItem.ManagedEvents.route) {
+            ManagedEventsScreen(navController = navController)
+        }
+        composable(
+            route = NavigationItem.HostEventDetail.route,
+            arguments = listOf(navArgument(ARG_EVENT_ID) { type = NavType.StringType })
+        ) { backStackEntry ->
+            HostEventDetailScreen(
+                navController = navController,
+                eventId = backStackEntry.arguments?.getString(ARG_EVENT_ID).orEmpty()
+            )
+        }
+        composable(
+            route = NavigationItem.HostAttendeeDetail.route,
+            arguments = listOf(
+                navArgument(ARG_EVENT_ID) { type = NavType.StringType },
+                navArgument(ARG_USER_ID) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            HostAttendeeDetailScreen(
+                navController = navController,
+                eventId = backStackEntry.arguments?.getString(ARG_EVENT_ID).orEmpty(),
+                userId = backStackEntry.arguments?.getString(ARG_USER_ID).orEmpty()
+            )
+        }
+        composable(
+            route = NavigationItem.ExportPreview.route,
+            arguments = listOf(
+                navArgument(ARG_EVENT_ID) { type = NavType.StringType },
+                navArgument(ARG_USER_ID) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ) { backStackEntry ->
+            ExportPreviewScreen(
+                navController = navController,
+                eventId = backStackEntry.arguments?.getString(ARG_EVENT_ID).orEmpty(),
+                userId = backStackEntry.arguments?.getString(ARG_USER_ID)?.ifBlank { null }
+            )
         }
         composable(
             route = NavigationItem.AttendanceDetail.route,

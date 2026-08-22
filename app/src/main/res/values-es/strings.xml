@@ -40,4 +40,80 @@
     <string name="hold_to_record_attendance">Mantén presionado para registrar la asistencia</string>
     <string name="see_details">Ver detalles</string>
     <string name="status_in_progress">En curso</string>
+    <!-- Eventos gestionados (organizador) -->
+    <string name="managed_events_description">Eventos que organizas. Abre uno para ver quién asiste.</string>
+    <string name="no_managed_events">Todavía no organizas nada</string>
+    <string name="no_managed_events_description">Crea un evento y su QR de asistencia queda listo para escanear.</string>
+    <string name="attendee_count">%1$d inscritos</string>
+    <string name="attendee_breakdown">%1$d a tiempo · %2$d tarde · %3$d ausente</string>
+
+    <!-- Detalle del evento (organizador) -->
+    <string name="event_detail_title">Evento</string>
+    <string name="section_attendants">Asistentes</string>
+    <string name="section_overview">Resumen</string>
+    <string name="overview_attendants">Asistentes</string>
+    <string name="overview_sessions">Sesiones</string>
+    <string name="overview_average">Promedio</string>
+    <string name="search_attendants">Buscar asistentes</string>
+    <string name="sort_by_name">Nombre</string>
+    <string name="sort_by_score">Puntaje</string>
+    <string name="sort_by_absences">Ausencias</string>
+    <string name="no_attendants">Nadie se ha inscrito todavía</string>
+    <string name="no_attendants_description">Los asistentes aparecen aquí en cuanto escanean el QR del evento.</string>
+    <string name="no_attendants_match">Ningún asistente coincide con esa búsqueda</string>
+
+    <string name="action_edit_schedule">Editar horario</string>
+    <string name="action_delete_event">Eliminar evento</string>
+    <string name="action_export">Exportar</string>
+    <string name="action_share">Compartir</string>
+    <string name="action_open">Abrir</string>
+    <string name="action_retry">Reintentar</string>
+    <string name="action_done">Listo</string>
+    <string name="action_back">Atrás</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <string name="remove_attendee">Quitar asistente</string>
+    <string name="remove_attendee_of">Quitar a %1$s</string>
+    <string name="remove_attendee_message">%1$s deja de ver este evento y sale de la lista. Su asistencia pasada se conserva, así que volver a agregarlo la restaura.</string>
+    <string name="attendee_removed">Se quitó a %1$s</string>
+
+    <string name="delete_event_title">¿Eliminar este evento?</string>
+    <string name="delete_event_message">Se eliminan también todas las inscripciones y registros de asistencia de %1$s. Esto no se puede deshacer.</string>
+    <string name="event_deleted">Evento eliminado</string>
+
+    <string name="schedule_change_notified">Se notificó el nuevo horario a los asistentes</string>
+    <string name="schedule_change_not_notified">Horario guardado, pero no se pudo notificar a los asistentes</string>
+
+    <!-- Detalle del asistente (organizador) -->
+    <string name="attendee_detail_title">Asistente</string>
+    <string name="attendee_sessions">Sesiones</string>
+    <string name="export_this_attendant">Exportar este asistente</string>
+
+    <!-- Firma -->
+    <string name="signature">Firma</string>
+    <string name="signature_title">Tu firma</string>
+    <string name="signature_description">Dibuja la firma que aparecerá en cada registro de asistencia donde figures.</string>
+    <string name="signature_current">Registrada</string>
+    <string name="signature_pad_hint">Firma aquí</string>
+    <string name="signature_clear">Borrar</string>
+    <string name="signature_save">Guardar</string>
+    <string name="signature_remove">Quitar</string>
+    <string name="signature_none">--</string>
+    <string name="signature_on_file">Firma registrada</string>
+    <string name="signature_saved">Firma guardada</string>
+    <string name="signature_set_yours">Configura tu firma</string>
+    <string name="signature_code_explained">Sin una firma dibujada, los registros se firman con un código único derivado de tu cuenta y de la sesión.</string>
+
+    <!-- Exportación -->
+    <string name="export_title">Exportar asistencia</string>
+    <string name="export_format_pdf">PDF</string>
+    <string name="export_format_excel">Excel</string>
+    <string name="export_preview">Vista previa</string>
+    <string name="export_rows">%1$d filas</string>
+    <string name="export_failed">No se pudo crear el archivo. Inténtalo de nuevo.</string>
+    <string name="export_no_app">Ninguna app de este teléfono puede abrir ese archivo.</string>
+    <string name="export_page_of">Página %1$d de %2$d</string>
+    <string name="export_preview_truncated">Mostrando las primeras %1$d páginas. El archivo compartido las incluye todas.</string>
+    <string name="export_excel_note">Las firmas se exportan como su código, porque una celda no puede contener el dibujo.</string>
 </resources>

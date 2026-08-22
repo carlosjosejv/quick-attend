@@ -31,6 +31,7 @@ import com.greenshark.quickattend.R
 import com.greenshark.quickattend.data.EventOccurrence
 import com.greenshark.quickattend.ui.commons.NavigationItem
 import com.greenshark.quickattend.ui.component.DayItem
+import com.greenshark.quickattend.ui.component.common.NavCard
 import com.greenshark.quickattend.ui.component.MainEvent
 import com.greenshark.quickattend.ui.component.Shortcut
 import com.greenshark.quickattend.ui.component.UpcomingEventsRow
@@ -63,7 +64,8 @@ fun HomeScreen(
                 )
             )
         },
-        onViewAllEvents = { navController.navigate(NavigationItem.UpcomingEvents.route) }
+        onViewAllEvents = { navController.navigate(NavigationItem.UpcomingEvents.route) },
+        onManagedEvents = { navController.navigate(NavigationItem.ManagedEvents.route) }
     )
 }
 
@@ -74,6 +76,7 @@ fun HomeContent(
     onScan: () -> Unit,
     onEventClick: (EventOccurrence) -> Unit,
     onViewAllEvents: () -> Unit,
+    onManagedEvents: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -163,6 +166,13 @@ fun HomeContent(
             onEventClick = onEventClick,
             onViewAll = onViewAllEvents
         )
+
+        NavCard(
+            title = stringResource(R.string.managed_events),
+            subtitle = stringResource(R.string.description_2),
+            icon = R.drawable.group,
+            onClick = onManagedEvents
+        )
     }
 }
 
@@ -184,7 +194,8 @@ fun HomeContentPreview() {
             onAction = {},
             onScan = {},
             onEventClick = {},
-            onViewAllEvents = {}
+            onViewAllEvents = {},
+            onManagedEvents = {}
         )
     }
 }
@@ -205,7 +216,8 @@ fun HomeContentFreeDayPreview() {
             onAction = {},
             onScan = {},
             onEventClick = {},
-            onViewAllEvents = {}
+            onViewAllEvents = {},
+            onManagedEvents = {}
         )
     }
 }

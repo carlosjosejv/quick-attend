@@ -15,4 +15,7 @@ interface AttendanceRepository {
 
     /** Check-ins this user recorded for one event, in no particular order. */
     suspend fun getCheckIns(eventId: String, userId: String): DataResult<List<AttendanceCheckIn>>
+
+    /** Every check-in recorded for one event, across all its attendants. */
+    suspend fun getEventCheckIns(eventId: String): DataResult<List<AttendanceCheckIn>>
 }

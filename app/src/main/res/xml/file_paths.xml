@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Exported attendance records live in the cache, so the system reclaims them on
+  its own once they have been shared.
+-->
+<paths>
+    <cache-path
+        name="exports"
+        path="exports/" />
+</paths>
